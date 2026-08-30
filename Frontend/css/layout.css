@@ -87,6 +87,12 @@
 .sync-indicator { display: flex; align-items: center; gap: 0.35rem; font-size: 0.74rem; color: var(--status-ok); font-weight: 600; }
 
 .topbar-right { display: flex; align-items: center; gap: 0.5rem; }
+.topbar-lang-pill {
+  font-size: 0.72rem; font-weight: 700; padding: 0.4rem 0.75rem; border-radius: 999px;
+  background: var(--bg-alt); color: var(--text-secondary); border: 1px solid var(--border-strong);
+  display: flex; align-items: center; gap: 0.35rem; flex-shrink: 0; transition: all var(--t-fast) var(--ease);
+}
+.topbar-lang-pill:hover { border-color: var(--accent); color: var(--accent-dark); background: var(--accent-soft); }
 .topbar-search { position: relative; width: 260px; }
 .topbar-search input { padding-left: 2.1rem; background: var(--bg-alt); border-color: transparent; }
 .topbar-search .icon { position: absolute; left: 0.65rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.85rem; }

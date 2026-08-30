@@ -62,8 +62,10 @@ function statusBadgeClass(status) {
 }
 
 function humanizeEnum(value) {
-  if (!value) return '';
-  return value.replace(/([a-z])([A-Z])/g, '$1 $2');
+  // Delegates to I18n so every status/priority/category badge across every
+  // view translates automatically when the language is switched, without
+  // each view needing to know about translation.
+  return I18n.enumLabel(value);
 }
 
 function debounce(fn, delay = 300) {

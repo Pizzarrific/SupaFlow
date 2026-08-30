@@ -5,16 +5,16 @@ Views.reports = {
       <div class="kpi-grid" id="rep-kpi">${Array(4).fill('<div class="skeleton skeleton-card"></div>').join('')}</div>
       <div class="two-col" style="margin-bottom:1.4rem;">
         <div class="chart-card">
-          <h3 style="margin-bottom:0.8rem;">Employee Performance</h3>
+          <h3 style="margin-bottom:0.8rem;">${I18n.t('employee_performance')}</h3>
           <div id="rep-perf-chart"><div class="skeleton skeleton-card"></div></div>
         </div>
         <div class="chart-card">
-          <h3 style="margin-bottom:0.8rem;">Inventory Health</h3>
+          <h3 style="margin-bottom:0.8rem;">${I18n.t('inventory_health')}</h3>
           <div id="rep-inv"><div class="skeleton skeleton-card"></div></div>
         </div>
       </div>
       <div class="chart-card">
-        <h3 style="margin-bottom:0.8rem;">Customer Service</h3>
+        <h3 style="margin-bottom:0.8rem;">${I18n.t('cs_title')}</h3>
         <div id="rep-cs"><div class="skeleton skeleton-card"></div></div>
       </div>
     `;
@@ -28,10 +28,10 @@ Views.reports = {
 
   renderKpis(d) {
     document.getElementById('rep-kpi').innerHTML = `
-      <div class="kpi-card"><div class="kpi-figure">${d.completedTasks}</div><div class="kpi-label">Completed today</div></div>
-      <div class="kpi-card"><div class="kpi-figure">${d.overdueTasks}</div><div class="kpi-label">Overdue tasks</div></div>
-      <div class="kpi-card"><div class="kpi-figure">${d.averageCompletionHours}h</div><div class="kpi-label">Avg. completion time</div></div>
-      <div class="kpi-card"><div class="kpi-figure">${d.employeesPresent}</div><div class="kpi-label">Employees present</div></div>
+      <div class="kpi-card"><div class="kpi-figure">${d.completedTasks}</div><div class="kpi-label">${I18n.t('completed_today')}</div></div>
+      <div class="kpi-card"><div class="kpi-figure">${d.overdueTasks}</div><div class="kpi-label">${I18n.t('overdue_tasks')}</div></div>
+      <div class="kpi-card"><div class="kpi-figure">${d.averageCompletionHours}h</div><div class="kpi-label">${I18n.t('avg_completion')}</div></div>
+      <div class="kpi-card"><div class="kpi-figure">${d.employeesPresent}</div><div class="kpi-label">${I18n.t('employees_present')}</div></div>
     `;
   },
 
@@ -49,7 +49,7 @@ Views.reports = {
       </div>
       <div style="margin-top:1rem; max-height:180px; overflow-y:auto;">
         <table class="data-table">
-          <thead><tr><th>Employee</th><th>Completed</th><th>Overdue</th><th>Hours</th></tr></thead>
+          <thead><tr><th>${I18n.t('employee_col')}</th><th>${I18n.t('col_completed')}</th><th>${I18n.t('col_overdue')}</th><th>${I18n.t('col_hours')}</th></tr></thead>
           <tbody>${top.map(p => `<tr><td>${p.employeeId} · ${escapeHtml(p.name)}</td><td>${p.tasksCompleted}</td><td>${p.tasksOverdue}</td><td>${p.hoursWorked}h</td></tr>`).join('')}</tbody>
         </table>
       </div>`;
@@ -58,18 +58,18 @@ Views.reports = {
   renderInventory(inv) {
     document.getElementById('rep-inv').innerHTML = `
       <div class="emp-stats-row">
-        <div class="emp-stat"><div class="num">${inv.lowStockCount}</div><div class="lbl">Low / critical stock</div></div>
-        <div class="emp-stat"><div class="num">${inv.outOfStockCount}</div><div class="lbl">Out of stock</div></div>
-        <div class="emp-stat"><div class="num">${inv.restocksCompletedToday}</div><div class="lbl">Restocks today</div></div>
+        <div class="emp-stat"><div class="num">${inv.lowStockCount}</div><div class="lbl">${I18n.t('low_critical_stock')}</div></div>
+        <div class="emp-stat"><div class="num">${inv.outOfStockCount}</div><div class="lbl">${I18n.t('out_of_stock')}</div></div>
+        <div class="emp-stat"><div class="num">${inv.restocksCompletedToday}</div><div class="lbl">${I18n.t('restocks_today')}</div></div>
       </div>`;
   },
 
   renderCustomerService(cs) {
     document.getElementById('rep-cs').innerHTML = `
       <div class="emp-stats-row">
-        <div class="emp-stat"><div class="num">${cs.issuesOpened}</div><div class="lbl">Opened today</div></div>
-        <div class="emp-stat"><div class="num">${cs.issuesResolved}</div><div class="lbl">Total resolved</div></div>
-        <div class="emp-stat"><div class="num">${cs.averageResolutionHours}h</div><div class="lbl">Avg. resolution time</div></div>
+        <div class="emp-stat"><div class="num">${cs.issuesOpened}</div><div class="lbl">${I18n.t('opened_today')}</div></div>
+        <div class="emp-stat"><div class="num">${cs.issuesResolved}</div><div class="lbl">${I18n.t('total_resolved')}</div></div>
+        <div class="emp-stat"><div class="num">${cs.averageResolutionHours}h</div><div class="lbl">${I18n.t('avg_resolution')}</div></div>
       </div>`;
   }
 };

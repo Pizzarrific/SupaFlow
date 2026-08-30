@@ -11,19 +11,19 @@ Views.attendance = {
           <div class="clock-hero" id="clock-hero"><div class="skeleton skeleton-card"></div></div>
         </div>
         <div class="card">
-          <h3 style="margin-bottom:0.8rem;">This week</h3>
+          <h3 style="margin-bottom:0.8rem;">${I18n.t('this_week')}</h3>
           <div class="emp-stats-row" id="week-stats">
-            <div class="emp-stat"><div class="num" id="week-hours">—</div><div class="lbl">Hours this week</div></div>
-            <div class="emp-stat"><div class="num" id="today-hours">—</div><div class="lbl">Hours today</div></div>
+            <div class="emp-stat"><div class="num" id="week-hours">—</div><div class="lbl">${I18n.t('hours_this_week')}</div></div>
+            <div class="emp-stat"><div class="num" id="today-hours">—</div><div class="lbl">${I18n.t('hours_today')}</div></div>
           </div>
           <div class="divider"></div>
-          <h3 style="margin-bottom:0.6rem;">Recent shifts</h3>
+          <h3 style="margin-bottom:0.6rem;">${I18n.t('recent_shifts')}</h3>
           <div id="my-history"><div class="skeleton skeleton-line"></div></div>
         </div>
       </div>
       ${isManager ? `
       <div class="divider"></div>
-      <div class="page-header"><div><h2>Team Attendance</h2><p class="subtitle">Today's clock in records across the store.</p></div></div>
+      <div class="page-header"><div><h2>${I18n.t('team_attendance')}</h2><p class="subtitle">${I18n.t('team_attendance_sub')}</p></div></div>
       <div id="team-attendance"><div class="skeleton skeleton-card"></div></div>
       ` : ''}
     `;
@@ -50,23 +50,23 @@ Views.attendance = {
     const s = this.status;
     if (!s.isClockedIn) {
       hero.innerHTML = `
-        <div class="clock-status-label">You're currently off shift.</div>
+        <div class="clock-status-label">${I18n.t('currently_off_shift_msg')}</div>
         <div class="clock-time" id="live-clock">00:00:00</div>
-        <button class="btn btn-primary clock-btn" id="clock-in-btn">Clock In</button>
+        <button class="btn btn-primary clock-btn" id="clock-in-btn">${I18n.t('clock_in')}</button>
       `;
       document.getElementById('clock-in-btn').onclick = () => this.clockIn();
     } else {
       hero.innerHTML = `
-        <div class="clock-status-label">${s.isOnBreak ? 'On break' : 'Shift active'}</div>
+        <div class="clock-status-label">${s.isOnBreak ? I18n.t('on_break_label') : I18n.t('shift_active')}</div>
         <div class="clock-time" id="live-clock">00:00:00</div>
         <div class="clock-meta-row">
-          <div class="clock-meta-item"><div class="num">${formatTime(s.clockIn)}</div><div class="lbl">Started</div></div>
+          <div class="clock-meta-item"><div class="num">${formatTime(s.clockIn)}</div><div class="lbl">${I18n.t('started_label')}</div></div>
         </div>
         <div style="display:flex; gap:0.6rem;">
           ${s.isOnBreak
-            ? '<button class="btn btn-secondary clock-btn" id="break-end-btn">End Break</button>'
-            : '<button class="btn btn-secondary clock-btn" id="break-start-btn">Start Break</button>'}
-          <button class="btn btn-danger clock-btn" id="clock-out-btn">Clock Out</button>
+            ? `<button class="btn btn-secondary clock-btn" id="break-end-btn">${I18n.t('end_break')}</button>`
+            : `<button class="btn btn-secondary clock-btn" id="break-start-btn">${I18n.t('start_break')}</button>`}
+          <button class="btn btn-danger clock-btn" id="clock-out-btn">${I18n.t('clock_out')}</button>
         </div>
       `;
       document.getElementById('clock-out-btn').onclick = () => this.clockOut();
@@ -81,7 +81,6 @@ Views.attendance = {
   tickClock() {
     const el = document.getElementById('live-clock');
     if (!el) return;
-    const ref = this.clockInTime || new Date();
     const diff = this.clockInTime ? Date.now() - this.clockInTime.getTime() : 0;
     const h = String(Math.floor(diff / 3600000)).padStart(2, '0');
     const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
@@ -92,25 +91,25 @@ Views.attendance = {
   async clockIn() {
     try {
       await api.post('/attendance/clock-in');
-      showToast('Clocked in. Have a great shift!', 'success');
+      showToast(I18n.t('clocked_in_toast'), 'success');
       this.refreshStatus(); this.loadHistory();
     } catch (err) { showToast(err.message, 'error'); }
   },
   async clockOut() {
-    const ok = await confirmDialog('End your shift now?', { title: 'Clock out?', confirmLabel: 'Clock Out', danger: false });
+    const ok = await confirmDialog(I18n.t('clock_out_confirm_body'), { title: I18n.t('clock_out_confirm_title'), confirmLabel: I18n.t('clock_out'), danger: false });
     if (!ok) return;
     try {
       const res = await api.post('/attendance/clock-out');
-      showToast(`Clocked out. Shift duration: ${res.duration}.`, 'success');
+      showToast(`${I18n.t('clocked_out_toast')} ${res.duration}.`, 'success');
       this.refreshStatus(); this.loadHistory();
     } catch (err) { showToast(err.message, 'error'); }
   },
   async startBreak() {
-    try { await api.post('/attendance/break/start'); showToast('Break started.', 'success'); this.refreshStatus(); }
+    try { await api.post('/attendance/break/start'); showToast(I18n.t('break_started_toast'), 'success'); this.refreshStatus(); }
     catch (err) { showToast(err.message, 'error'); }
   },
   async endBreak() {
-    try { await api.post('/attendance/break/end'); showToast('Break ended. Back on the floor!', 'success'); this.refreshStatus(); }
+    try { await api.post('/attendance/break/end'); showToast(I18n.t('break_ended_toast'), 'success'); this.refreshStatus(); }
     catch (err) { showToast(err.message, 'error'); }
   },
 
@@ -118,28 +117,28 @@ Views.attendance = {
     const uid = Auth.getUser().id;
     const records = await api.get(`/employees/${uid}/attendance`);
     const el = document.getElementById('my-history');
-    if (!records.length) { el.innerHTML = '<p class="text-muted" style="font-size:0.85rem;">No shifts recorded yet.</p>'; return; }
+    if (!records.length) { el.innerHTML = `<p class="text-muted" style="font-size:0.85rem;">${I18n.t('no_shifts_yet')}</p>`; return; }
     el.innerHTML = records.slice(0, 8).map(r => `
       <div style="display:flex; justify-content:space-between; padding:0.5rem 0; border-bottom:1px solid var(--border); font-size:0.82rem;">
         <span>${new Date(r.clockIn).toLocaleDateString()}</span>
-        <span class="text-muted">${formatTime(r.clockIn)} – ${r.clockOut ? formatTime(r.clockOut) : 'active'}</span>
+        <span class="text-muted">${formatTime(r.clockIn)} – ${r.clockOut ? formatTime(r.clockOut) : I18n.t('active_badge')}</span>
       </div>`).join('');
   },
 
   async loadTeamAttendance() {
     const records = await api.get('/attendance');
     const el = document.getElementById('team-attendance');
-    if (!records.length) { el.innerHTML = '<div class="state-block"><p>No attendance records yet.</p></div>'; return; }
+    if (!records.length) { el.innerHTML = `<div class="state-block"><p>${I18n.t('no_attendance_yet')}</p></div>`; return; }
     el.innerHTML = `
       <table class="data-table">
-        <thead><tr><th>Employee ID</th><th>Name</th><th>Clock In</th><th>Clock Out</th><th>Duration</th></tr></thead>
+        <thead><tr><th>${I18n.t('col_employee_id')}</th><th>${I18n.t('col_name')}</th><th>${I18n.t('col_clock_in')}</th><th>${I18n.t('col_clock_out')}</th><th>${I18n.t('col_duration')}</th></tr></thead>
         <tbody>
           ${records.slice(0, 40).map(r => `
             <tr>
               <td class="mono">${r.employeeId}</td>
               <td>${escapeHtml(r.employeeName)}</td>
               <td>${formatDateTime(r.clockIn)}</td>
-              <td>${r.clockOut ? formatDateTime(r.clockOut) : '<span class="badge badge-ok">Active</span>'}</td>
+              <td>${r.clockOut ? formatDateTime(r.clockOut) : `<span class="badge badge-ok">${I18n.t('active_badge')}</span>`}</td>
               <td>${r.duration}</td>
             </tr>`).join('')}
         </tbody>

@@ -33,7 +33,7 @@ const NotifCenter = {
   async open() {
     closeOtherPanels('notif-panel');
     this.panel.classList.remove('hidden');
-    this.panel.innerHTML = `<div class="state-block"><div class="icon">⏳</div><p>Loading…</p></div>`;
+    this.panel.innerHTML = `<div class="state-block"><div class="icon">⏳</div><p>${I18n.t('loading')}</p></div>`;
     try {
       const list = await api.get('/notifications');
       this.render(list);
@@ -45,11 +45,11 @@ const NotifCenter = {
   render(list) {
     const header = `
       <div class="dropdown-panel-header">
-        <strong>Notifications</strong>
-        <button class="btn btn-ghost btn-sm" id="notif-mark-all">Mark all read</button>
+        <strong>${I18n.t('notifications')}</strong>
+        <button class="btn btn-ghost btn-sm" id="notif-mark-all">${I18n.t('mark_all_read')}</button>
       </div>`;
     if (!list.length) {
-      this.panel.innerHTML = header + `<div class="state-block"><div class="icon">🔔</div><p>You're all caught up.</p></div>`;
+      this.panel.innerHTML = header + `<div class="state-block"><div class="icon">🔔</div><p>${I18n.t('all_caught_up')}</p></div>`;
     } else {
       const items = list.map(n => `
         <div class="notif-item ${n.isRead ? 'read' : 'unread'}" data-id="${n.id}" data-link-type="${n.linkType || ''}" data-link-id="${n.linkId || ''}">
@@ -59,7 +59,7 @@ const NotifCenter = {
             <div class="msg">${escapeHtml(n.message)}</div>
             <div class="time">${timeAgo(n.createdAt)}</div>
           </div>
-          <button class="del" data-del="${n.id}" title="Delete" aria-label="Delete notification">✕</button>
+          <button class="del" data-del="${n.id}" title="${I18n.t('delete_notification')}" aria-label="${I18n.t('delete_notification')}">✕</button>
         </div>
       `).join('');
       this.panel.innerHTML = header + `<div>${items}</div>`;

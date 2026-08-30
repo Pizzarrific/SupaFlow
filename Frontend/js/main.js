@@ -97,6 +97,7 @@ function runStartupSequence(user) {
 function wireLangToggle() {
   const island = document.getElementById('dynamic-island');
   const langBtn = document.getElementById('lang-toggle-btn');
+  const topbarLangBtn = document.getElementById('topbar-lang-btn');
 
   island?.addEventListener('click', () => island.classList.toggle('expanded'));
   island?.addEventListener('keydown', (e) => {
@@ -110,6 +111,8 @@ function wireLangToggle() {
     e.stopPropagation();
     I18n.toggle();
   });
+  topbarLangBtn?.addEventListener('click', () => I18n.toggle());
+
   document.addEventListener('sf-lang-change', () => {
     if (currentView) navigateTo(currentView);
   });
@@ -139,8 +142,8 @@ function wireProfileMenu() {
           <div class="text-muted mono" style="font-size:0.75rem;">${user.employeeId}</div>
         </div>
         <div class="divider" style="margin:0;"></div>
-        <button class="nav-item" style="width:100%; border-radius:0;" id="pm-view-profile">🪪 My Profile</button>
-        <button class="nav-item" style="width:100%; border-radius:0;" id="pm-logout">↩ Log out</button>
+        <button class="nav-item" style="width:100%; border-radius:0;" id="pm-view-profile">🪪 ${I18n.t('view_profile_menu')}</button>
+        <button class="nav-item" style="width:100%; border-radius:0;" id="pm-logout">↩ ${I18n.t('logout')}</button>
       `;
       panel.querySelector('#pm-view-profile').onclick = () => { panel.classList.add('hidden'); Views.employees.openProfile(user.id); };
       panel.querySelector('#pm-logout').onclick = () => Auth.logout();
@@ -159,13 +162,13 @@ function wireProfileMenu() {
 function wireMobileMore() {
   document.getElementById('mobile-more-btn').addEventListener('click', () => {
     const items = [
-      ['team', '👥 Team Board'], ['employees', '🪪 Employees'], ['restocking', '🔁 Restocking'],
-      ['cleaning', '🧽 Cleaning'], ['deliveries', '🚚 Deliveries'], ['customer-service', '🎧 Customer Service']
+      ['team', `👥 ${I18n.t('nav_team')}`], ['employees', `🪪 ${I18n.t('nav_employees')}`], ['restocking', `🔁 ${I18n.t('nav_restocking')}`],
+      ['cleaning', `🧽 ${I18n.t('nav_cleaning')}`], ['deliveries', `🚚 ${I18n.t('nav_deliveries')}`], ['customer-service', `🎧 ${I18n.t('nav_customerService')}`]
     ];
-    if (Auth.isManager()) items.push(['reports', '📊 Reports']);
+    if (Auth.isManager()) items.push(['reports', `📊 ${I18n.t('nav_reports')}`]);
 
     const overlay = openModal(`
-      <div class="modal-header"><h3>More</h3><button class="modal-close" data-close>✕</button></div>
+      <div class="modal-header"><h3>${I18n.t('more_label')}</h3><button class="modal-close" data-close>✕</button></div>
       <div class="modal-body" style="padding:0.6rem;">
         ${items.map(([view, label]) => `<button class="nav-item" style="width:100%; margin-bottom:0.2rem;" data-goto="${view}">${label}</button>`).join('')}
       </div>

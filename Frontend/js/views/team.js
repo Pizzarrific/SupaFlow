@@ -29,10 +29,10 @@ Views.team = {
         </div>
         <div class="emp-status-row"><span class="status-dot ${statusClass} ${statusClass === 'on-floor' ? 'pulse' : ''}"></span> ${statusLabel}</div>
         <div class="emp-stats-row">
-          <div class="emp-stat"><div class="num">${e.activeTaskCount}</div><div class="lbl">Active tasks</div></div>
-          <div class="emp-stat"><div class="num">${e.todayHours}</div><div class="lbl">Today</div></div>
+          <div class="emp-stat"><div class="num">${e.activeTaskCount}</div><div class="lbl">${I18n.t('active_tasks')}</div></div>
+          <div class="emp-stat"><div class="num">${e.todayHours}</div><div class="lbl">${I18n.t('today_label')}</div></div>
         </div>
-        <button class="btn btn-secondary btn-sm btn-block">View Profile</button>
+        <button class="btn btn-secondary btn-sm btn-block">${I18n.t('view_profile')}</button>
       </div>`;
   }
 };

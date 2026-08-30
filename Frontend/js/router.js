@@ -21,25 +21,30 @@ async function navigateTo(viewName, params = {}) {
   const root = document.getElementById('view-root');
 
   if (viewName === 'reports' && !Auth.isManager()) {
-    root.innerHTML = `<div class="state-block"><div class="icon">🔒</div><h3>Manager access only</h3><p>Reports are visible to store managers.</p></div>`;
+    root.innerHTML = `<div class="state-block"><div class="icon">🔒</div><h3>${I18n.t('manager_access_only')}</h3><p>${I18n.t('reports_manager_note')}</p></div>`;
     setActiveNav('reports');
     return;
   }
 
   if (!view) {
-    root.innerHTML = `<div class="state-block"><div class="icon">🤔</div><h3>Page not found</h3></div>`;
+    root.innerHTML = `<div class="state-block"><div class="icon">🤔</div><h3>${I18n.t('page_not_found')}</h3></div>`;
     return;
   }
 
   currentView = viewName;
   setActiveNav(viewName);
-  root.innerHTML = `<div class="state-block"><div class="icon">⏳</div><p>Loading…</p></div>`;
+  root.innerHTML = `<div class="state-block"><div class="icon">⏳</div><p>${I18n.t('loading')}</p></div>`;
 
   try {
     await view.render(root, params);
+    // Any static data-i18n elements the view rendered (e.g. <h1 data-i18n="...">)
+    // need this to actually pick up the current language — the view's own
+    // I18n.t() calls handle dynamic content inline, but plain data-i18n
+    // markup only updates when apply() runs against it.
+    I18n.apply();
   } catch (err) {
     console.error(err);
-    root.innerHTML = `<div class="state-block"><div class="icon">⚠️</div><h3>Something went wrong</h3><p>${escapeHtml(err.message || 'Please try again.')}</p></div>`;
+    root.innerHTML = `<div class="state-block"><div class="icon">⚠️</div><h3>${I18n.t('something_wrong')}</h3><p>${escapeHtml(err.message || I18n.t('please_try_again'))}</p></div>`;
   }
 }
 

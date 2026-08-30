@@ -22,7 +22,7 @@ const GlobalSearch = {
     }
     closeOtherPanels('search-panel');
     this.panel.classList.remove('hidden');
-    this.panel.innerHTML = `<div class="state-block"><div class="icon">⏳</div><p>Searching…</p></div>`;
+    this.panel.innerHTML = `<div class="state-block"><div class="icon">⏳</div><p>${I18n.t('searching')}</p></div>`;
 
     try {
       const results = await api.get(`/search?q=${encodeURIComponent(query)}`);
@@ -34,11 +34,11 @@ const GlobalSearch = {
 
   render(results) {
     const groups = [
-      { key: 'employees', label: 'Employees', map: (e) => ({ primary: `${e.employeeId} · ${e.name}`, secondary: e.department, view: 'employees' }) },
-      { key: 'tasks', label: 'Tasks', map: (t) => ({ primary: t.title, secondary: `${t.status} · ${t.priority}`, view: 'tasks' }) },
-      { key: 'inventory', label: 'Inventory', map: (i) => ({ primary: i.name, secondary: `${i.sku} · ${i.status}`, view: 'inventory' }) },
-      { key: 'deliveries', label: 'Deliveries', map: (d) => ({ primary: d.deliveryNumber, secondary: `${d.supplier} · ${d.status}`, view: 'deliveries' }) },
-      { key: 'customerIssues', label: 'Customer Issues', map: (c) => ({ primary: c.description, secondary: `${c.department} · ${c.status}`, view: 'customer-service' }) }
+      { key: 'employees', label: I18n.t('search_group_employees'), map: (e) => ({ primary: `${e.employeeId} · ${e.name}`, secondary: e.department, view: 'employees' }) },
+      { key: 'tasks', label: I18n.t('search_group_tasks'), map: (t) => ({ primary: t.title, secondary: `${humanizeEnum(t.status)} · ${humanizeEnum(t.priority)}`, view: 'tasks' }) },
+      { key: 'inventory', label: I18n.t('search_group_inventory'), map: (i) => ({ primary: i.name, secondary: `${i.sku} · ${humanizeEnum(i.status)}`, view: 'inventory' }) },
+      { key: 'deliveries', label: I18n.t('search_group_deliveries'), map: (d) => ({ primary: d.deliveryNumber, secondary: `${d.supplier} · ${humanizeEnum(d.status)}`, view: 'deliveries' }) },
+      { key: 'customerIssues', label: I18n.t('search_group_issues'), map: (c) => ({ primary: c.description, secondary: `${c.department} · ${humanizeEnum(c.status)}`, view: 'customer-service' }) }
     ];
 
     let html = '';
@@ -56,7 +56,7 @@ const GlobalSearch = {
       }).join('');
     });
 
-    this.panel.innerHTML = any ? html : `<div class="state-block"><p>No matches found.</p></div>`;
+    this.panel.innerHTML = any ? html : `<div class="state-block"><p>${I18n.t('no_matches_found')}</p></div>`;
     this.panel.querySelectorAll('.search-result-item').forEach(el => {
       el.addEventListener('click', () => {
         location.hash = `#${el.dataset.view}`;

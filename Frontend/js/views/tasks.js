@@ -3,16 +3,18 @@ Views.tasks = {
   employees: [],
 
   async render(root) {
+    const categories = ['Restocking', 'Cleaning', 'Inventory', 'Delivery', 'CustomerService', 'Maintenance', 'Other'];
+    const priorities = ['Urgent', 'High', 'Medium', 'Low'];
     root.innerHTML = `
       <div class="page-header">
         <div><h1 data-i18n="tasks_title">My Tasks</h1><p class="subtitle" data-i18n="tasks_subtitle">Drag cards between columns to update status.</p></div>
         <button class="btn btn-primary" id="add-task-btn">➕ <span data-i18n="add_task">Add Task</span></button>
       </div>
       <div class="filter-bar">
-        <div class="search-input-wrap"><span class="icon">🔍</span><input type="search" id="task-search" placeholder="Search tasks…"></div>
-        <select id="filter-priority"><option value="">All priorities</option><option>Urgent</option><option>High</option><option>Medium</option><option>Low</option></select>
-        <select id="filter-category"><option value="">All categories</option><option>Restocking</option><option>Cleaning</option><option>Inventory</option><option>Delivery</option><option>CustomerService</option><option>Maintenance</option><option>Other</option></select>
-        <select id="filter-employee"><option value="">All employees</option></select>
+        <div class="search-input-wrap"><span class="icon">🔍</span><input type="search" id="task-search" placeholder="${I18n.t('search_tasks')}"></div>
+        <select id="filter-priority"><option value="">${I18n.t('filter_all_priorities')}</option>${priorities.map(p => `<option value="${p}">${humanizeEnum(p)}</option>`).join('')}</select>
+        <select id="filter-category"><option value="">${I18n.t('filter_all_categories')}</option>${categories.map(c => `<option value="${c}">${humanizeEnum(c)}</option>`).join('')}</select>
+        <select id="filter-employee"><option value="">${I18n.t('filter_all_employees')}</option></select>
       </div>
       <div class="board-columns" id="board-columns">
         ${['Todo', 'InProgress', 'Blocked', 'Completed'].map(s => this.columnSkeleton(s)).join('')}
@@ -27,7 +29,7 @@ Views.tasks = {
 
     this.employees = await Store.getEmployees();
     const empSelect = document.getElementById('filter-employee');
-    empSelect.innerHTML = '<option value="">All employees</option>' + this.employees.map(e => `<option value="${e.id}">${escapeHtml(e.name)} (${e.employeeId})</option>`).join('');
+    empSelect.innerHTML = `<option value="">${I18n.t('filter_all_employees')}</option>` + this.employees.map(e => `<option value="${e.id}">${escapeHtml(e.name)} (${e.employeeId})</option>`).join('');
 
     await this.load();
   },
@@ -37,7 +39,7 @@ Views.tasks = {
   },
 
   colLabel(status) {
-    return { Todo: 'To Do', InProgress: 'In Progress', Blocked: 'Blocked', Completed: 'Done' }[status];
+    return { Todo: I18n.t('col_todo'), InProgress: I18n.t('col_inprogress'), Blocked: I18n.t('col_blocked'), Completed: I18n.t('col_done') }[status];
   },
 
   async load() {
@@ -67,7 +69,7 @@ Views.tasks = {
             <span class="board-col-count">${tasks.length}</span>
           </div>
           <div class="board-col-body" data-status="${status}">
-            ${tasks.length ? tasks.map(t => this.taskCard(t)).join('') : '<p class="text-muted" style="font-size:0.8rem; padding:0.5rem;">No tasks here.</p>'}
+            ${tasks.length ? tasks.map(t => this.taskCard(t)).join('') : `<p class="text-muted" style="font-size:0.8rem; padding:0.5rem;">${I18n.t('no_tasks_here')}</p>`}
           </div>
         </div>`;
     }).join('');
@@ -82,7 +84,7 @@ Views.tasks = {
       <div class="task-card" draggable="true" data-id="${t.id}">
         <div class="tc-top">
           <span class="badge badge-cat" data-cat="${t.category}">${humanizeEnum(t.category)}</span>
-          <span class="badge ${priorityBadgeClass(t.priority)}">${t.priority}</span>
+          <span class="badge ${priorityBadgeClass(t.priority)}">${humanizeEnum(t.priority)}</span>
         </div>
         <div class="tc-title">${escapeHtml(t.title)}</div>
         <div class="tc-meta">
@@ -90,8 +92,8 @@ Views.tasks = {
           <span class="tc-comments">${t.commentCount > 0 ? '💬 ' + t.commentCount : ''}</span>
         </div>
         <div class="tc-meta">
-          <div class="avatar avatar-sm" title="${t.assignedTo ? escapeHtml(t.assignedTo.name) : 'Unassigned'}">${initials}</div>
-          <span class="text-muted" style="font-size:0.7rem;">${t.assignedTo ? t.assignedTo.employeeId : 'Unassigned'}</span>
+          <div class="avatar avatar-sm" title="${t.assignedTo ? escapeHtml(t.assignedTo.name) : I18n.t('unassigned')}">${initials}</div>
+          <span class="text-muted" style="font-size:0.7rem;">${t.assignedTo ? t.assignedTo.employeeId : I18n.t('unassigned')}</span>
         </div>
       </div>`;
   },
@@ -130,7 +132,7 @@ Views.tasks = {
 
         try {
           await api.patch(`/tasks/${taskId}/status`, { status: newStatus });
-          showToast(newStatus === 'Completed' ? 'Task marked complete.' : `Moved to ${this.colLabel(newStatus)}.`, 'success');
+          showToast(newStatus === 'Completed' ? I18n.t('task_completed_toast') : `${I18n.t('moved_to')} ${this.colLabel(newStatus)}.`, 'success');
         } catch (err) {
           task.status = prevStatus; // rollback
           this.renderBoard();
@@ -142,30 +144,32 @@ Views.tasks = {
 
   async openCreateModal() {
     const employees = await Store.getEmployees();
+    const categories = ['Restocking', 'Cleaning', 'Inventory', 'Delivery', 'CustomerService', 'Maintenance', 'Other'];
+    const priorities = ['Low', 'Medium', 'High', 'Urgent'];
     const overlay = openModal(`
-      <div class="modal-header"><h3>Add Task</h3><button class="modal-close" data-close>✕</button></div>
+      <div class="modal-header"><h3>${I18n.t('add_task')}</h3><button class="modal-close" data-close>✕</button></div>
       <form id="task-form">
         <div class="modal-body">
-          <div class="form-row"><label for="t-title">Title</label><input id="t-title" required placeholder="e.g. Restock dairy aisle"></div>
-          <div class="form-row"><label for="t-desc">Description</label><textarea id="t-desc" rows="3" placeholder="Optional details…"></textarea></div>
+          <div class="form-row"><label for="t-title">${I18n.t('task_title_label')}</label><input id="t-title" required placeholder="${I18n.t('task_title_ph')}"></div>
+          <div class="form-row"><label for="t-desc">${I18n.t('task_desc_label')}</label><textarea id="t-desc" rows="3" placeholder="${I18n.t('task_desc_ph')}"></textarea></div>
           <div class="form-grid">
-            <div class="form-row"><label for="t-category">Category</label>
-              <select id="t-category"><option>Restocking</option><option>Cleaning</option><option>Inventory</option><option>Delivery</option><option>CustomerService</option><option>Maintenance</option><option>Other</option></select>
+            <div class="form-row"><label for="t-category">${I18n.t('task_category_label')}</label>
+              <select id="t-category">${categories.map(c => `<option value="${c}">${humanizeEnum(c)}</option>`).join('')}</select>
             </div>
-            <div class="form-row"><label for="t-priority">Priority</label>
-              <select id="t-priority"><option>Low</option><option selected>Medium</option><option>High</option><option>Urgent</option></select>
+            <div class="form-row"><label for="t-priority">${I18n.t('task_priority_label')}</label>
+              <select id="t-priority">${priorities.map(p => `<option value="${p}" ${p === 'Medium' ? 'selected' : ''}>${humanizeEnum(p)}</option>`).join('')}</select>
             </div>
           </div>
           <div class="form-grid">
-            <div class="form-row"><label for="t-assignee">Assign to</label>
-              <select id="t-assignee"><option value="">Unassigned</option>${employees.map(e => `<option value="${e.id}">${escapeHtml(e.name)} (${e.employeeId})</option>`).join('')}</select>
+            <div class="form-row"><label for="t-assignee">${I18n.t('task_assignee_label')}</label>
+              <select id="t-assignee"><option value="">${I18n.t('unassigned')}</option>${employees.map(e => `<option value="${e.id}">${escapeHtml(e.name)} (${e.employeeId})</option>`).join('')}</select>
             </div>
-            <div class="form-row"><label for="t-due">Due date</label><input type="datetime-local" id="t-due"></div>
+            <div class="form-row"><label for="t-due">${I18n.t('task_due_label')}</label><input type="datetime-local" id="t-due"></div>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-close>Cancel</button>
-          <button type="submit" class="btn btn-primary">Create Task</button>
+          <button type="button" class="btn btn-secondary" data-close>${I18n.t('cancel')}</button>
+          <button type="submit" class="btn btn-primary">${I18n.t('create_task')}</button>
         </div>
       </form>
     `);
@@ -184,7 +188,7 @@ Views.tasks = {
           dueDate: document.getElementById('t-due').value || null
         });
         closeModal();
-        showToast('Task created.', 'success');
+        showToast(I18n.t('task_created'), 'success');
         this.load();
       } catch (err) {
         submitBtn.disabled = false;
@@ -205,38 +209,38 @@ Views.tasks = {
       <div class="modal-body">
         <div class="chip-row" style="margin-bottom:0.9rem;">
           <span class="badge badge-cat" data-cat="${task.category}">${humanizeEnum(task.category)}</span>
-          <span class="badge ${priorityBadgeClass(task.priority)}">${task.priority}</span>
+          <span class="badge ${priorityBadgeClass(task.priority)}">${humanizeEnum(task.priority)}</span>
           <span class="badge ${statusBadgeClass(task.status)}">${humanizeEnum(task.status)}</span>
         </div>
-        <p class="text-secondary" style="margin-bottom:1rem;">${escapeHtml(task.description || 'No description provided.')}</p>
+        <p class="text-secondary" style="margin-bottom:1rem;">${escapeHtml(task.description || '')}</p>
 
         <div class="form-grid" style="margin-bottom:1rem;">
-          <div class="form-row"><label>Assignee</label>
-            <select id="td-assignee"><option value="">Unassigned</option>${employees.map(e => `<option value="${e.id}" ${task.assignedTo?.id === e.id ? 'selected' : ''}>${escapeHtml(e.name)} (${e.employeeId})</option>`).join('')}</select>
+          <div class="form-row"><label>${I18n.t('assignee_label')}</label>
+            <select id="td-assignee"><option value="">${I18n.t('unassigned')}</option>${employees.map(e => `<option value="${e.id}" ${task.assignedTo?.id === e.id ? 'selected' : ''}>${escapeHtml(e.name)} (${e.employeeId})</option>`).join('')}</select>
           </div>
-          <div class="form-row"><label>Status</label>
+          <div class="form-row"><label>${I18n.t('status_label')}</label>
             <select id="td-status">${['Todo', 'InProgress', 'Blocked', 'Completed'].map(s => `<option value="${s}" ${task.status === s ? 'selected' : ''}>${this.colLabel(s)}</option>`).join('')}</select>
           </div>
         </div>
-        <button class="btn btn-secondary btn-sm" id="td-save">Save changes</button>
+        <button class="btn btn-secondary btn-sm" id="td-save">${I18n.t('save_changes')}</button>
 
         <div class="divider"></div>
-        <h3 style="margin-bottom:0.6rem;">Comments</h3>
+        <h3 style="margin-bottom:0.6rem;">${I18n.t('comments_heading')}</h3>
         <div id="td-comments" style="max-height:200px; overflow-y:auto; margin-bottom:0.8rem;">
           ${comments.length ? comments.map(c => `
             <div style="margin-bottom:0.7rem;">
               <div style="font-size:0.8rem;"><strong>${escapeHtml(c.userName)}</strong> <span class="text-muted mono">${c.employeeId}</span> <span class="text-muted">· ${timeAgo(c.createdAt)}</span></div>
               <div style="font-size:0.85rem;">${escapeHtml(c.comment)}</div>
-            </div>`).join('') : '<p class="text-muted" style="font-size:0.85rem;">No comments yet.</p>'}
+            </div>`).join('') : `<p class="text-muted" style="font-size:0.85rem;">${I18n.t('no_comments')}</p>`}
         </div>
         <div style="display:flex; gap:0.5rem;">
-          <input id="td-comment-input" placeholder="Add a comment… use @Name to mention">
-          <button class="btn btn-primary btn-sm" id="td-comment-send">Send</button>
+          <input id="td-comment-input" placeholder="${I18n.t('comment_ph')}">
+          <button class="btn btn-primary btn-sm" id="td-comment-send">${I18n.t('send')}</button>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-danger" id="td-delete">Delete task</button>
-        <button class="btn btn-secondary" data-close>Close</button>
+        <button class="btn btn-danger" id="td-delete">${I18n.t('delete_task')}</button>
+        <button class="btn btn-secondary" data-close>${I18n.t('close')}</button>
       </div>
     `, { wide: true });
 
@@ -251,7 +255,7 @@ Views.tasks = {
           priority: task.priority, assignedToUserId: newAssignee, dueDate: task.dueDate
         });
         if (newStatus !== task.status) await api.patch(`/tasks/${taskId}/status`, { status: newStatus });
-        showToast('Task updated.', 'success');
+        showToast(I18n.t('task_updated'), 'success');
         closeModal();
         this.load();
       } catch (err) { showToast(err.message, 'error'); }
@@ -263,18 +267,18 @@ Views.tasks = {
       try {
         await api.post(`/tasks/${taskId}/comments`, { comment: input.value.trim() });
         input.value = '';
-        showToast('Comment added.', 'success');
+        showToast(I18n.t('comment_added'), 'success');
         closeModal();
         this.openDetailModal(taskId);
       } catch (err) { showToast(err.message, 'error'); }
     };
 
     overlay.querySelector('#td-delete').onclick = async () => {
-      const ok = await confirmDialog('This will permanently delete the task.', { title: 'Delete this task?', confirmLabel: 'Delete' });
+      const ok = await confirmDialog(I18n.t('delete_task_confirm_body'), { title: I18n.t('delete_task_confirm_title'), confirmLabel: I18n.t('delete') });
       if (!ok) return;
       try {
         await api.delete(`/tasks/${taskId}`);
-        showToast('Task deleted.', 'success');
+        showToast(I18n.t('task_deleted'), 'success');
         closeModal();
         this.load();
       } catch (err) { showToast(err.message, 'error'); }

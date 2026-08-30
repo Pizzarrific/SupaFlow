@@ -24,17 +24,17 @@ function closeModal() {
   document.removeEventListener('keydown', escCloseHandler);
 }
 
-function confirmDialog(message, { title = 'Are you sure?', confirmLabel = 'Confirm', danger = true } = {}) {
+function confirmDialog(message, { title, confirmLabel, danger = true } = {}) {
   return new Promise((resolve) => {
     const overlay = openModal(`
       <div class="confirm-body">
         <div class="icon">${danger ? '⚠️' : '❓'}</div>
-        <h3>${escapeHtml(title)}</h3>
+        <h3>${escapeHtml(title || I18n.t('are_you_sure'))}</h3>
         <p class="text-muted" style="margin-top:0.5rem;">${escapeHtml(message)}</p>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" id="confirm-cancel">Cancel</button>
-        <button class="btn ${danger ? 'btn-danger' : 'btn-primary'}" id="confirm-ok">${escapeHtml(confirmLabel)}</button>
+        <button class="btn btn-secondary" id="confirm-cancel">${I18n.t('cancel')}</button>
+        <button class="btn ${danger ? 'btn-danger' : 'btn-primary'}" id="confirm-ok">${escapeHtml(confirmLabel || I18n.t('save'))}</button>
       </div>
     `);
     overlay.querySelector('#confirm-cancel').onclick = () => { closeModal(); resolve(false); };

@@ -31,7 +31,7 @@ async function apiRequest(path, { method = 'GET', body, auth = true } = {}) {
     // No separate login page — reload so main.js's Auth.ensureSession()
     // silently signs back in with the demo account.
     location.reload();
-    throw new Error('Your session expired. Signing back in…');
+    throw new Error(I18n.t('session_reconnecting'));
   }
 
   let payload;

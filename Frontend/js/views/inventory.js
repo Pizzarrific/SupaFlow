@@ -7,9 +7,9 @@ Views.inventory = {
         ${isManager ? `<button class="btn btn-primary" id="add-product-btn">➕ ${I18n.t('add_product')}</button>` : ''}
       </div>
       <div class="filter-bar">
-        <div class="search-input-wrap"><span class="icon">🔍</span><input type="search" id="inv-search" placeholder="Search by name or SKU…"></div>
-        <select id="inv-filter-category"><option value="">All categories</option></select>
-        <select id="inv-filter-status"><option value="">All statuses</option><option>InStock</option><option>LowStock</option><option>Critical</option><option>OutOfStock</option></select>
+        <div class="search-input-wrap"><span class="icon">🔍</span><input type="search" id="inv-search" placeholder="${I18n.t('search_by_name_sku')}"></div>
+        <select id="inv-filter-category"><option value="">${I18n.t('filter_all_categories')}</option></select>
+        <select id="inv-filter-status"><option value="">${I18n.t('filter_all_statuses')}</option><option value="InStock">${humanizeEnum('InStock')}</option><option value="LowStock">${humanizeEnum('LowStock')}</option><option value="Critical">${humanizeEnum('Critical')}</option><option value="OutOfStock">${humanizeEnum('OutOfStock')}</option></select>
       </div>
       <div class="card-grid" id="inv-grid">${Array(8).fill('<div class="skeleton skeleton-card"></div>').join('')}</div>
     `;
@@ -35,7 +35,7 @@ Views.inventory = {
     this.populateCategoryFilter(items);
     const grid = document.getElementById('inv-grid');
     if (!items.length) {
-      grid.innerHTML = `<div class="state-block" style="grid-column:1/-1;"><div class="icon">📦</div><h3>No products found</h3></div>`;
+      grid.innerHTML = `<div class="state-block" style="grid-column:1/-1;"><div class="icon">📦</div><h3>${I18n.t('no_products_found')}</h3></div>`;
       return;
     }
     grid.innerHTML = items.map(i => this.card(i)).join('');
@@ -51,7 +51,7 @@ Views.inventory = {
     const select = document.getElementById('inv-filter-category');
     if (select.dataset.populated) return;
     const cats = [...new Set(items.map(i => i.category))].sort();
-    select.innerHTML = '<option value="">All categories</option>' + cats.map(c => `<option>${c}</option>`).join('');
+    select.innerHTML = `<option value="">${I18n.t('filter_all_categories')}</option>` + cats.map(c => `<option>${c}</option>`).join('');
     select.dataset.populated = '1';
   },
 
@@ -66,15 +66,15 @@ Views.inventory = {
         </div>
         <div class="progress-track"><div class="progress-fill ${fillClass}" style="width:${pct}%"></div></div>
         <div class="inv-qty-row">
-          <span><strong>${i.quantity}</strong> units</span>
-          <span>Min: ${i.minimumQuantity}</span>
+          <span><strong>${i.quantity}</strong> ${I18n.t('units_label')}</span>
+          <span>${I18n.t('min_label')} ${i.minimumQuantity}</span>
         </div>
         <div class="inv-qty-row"><span class="text-muted mono" style="font-size:0.72rem;">${i.sku}</span></div>
         <div style="display:flex; gap:0.4rem; margin-top:0.8rem;">
           <button class="btn btn-secondary btn-sm" data-adjust="-1" data-id="${i.id}">−1</button>
           <button class="btn btn-secondary btn-sm" data-adjust="1" data-id="${i.id}">+1</button>
           <button class="btn btn-secondary btn-sm" data-adjust="10" data-id="${i.id}">+10</button>
-          ${Auth.isManager() ? `<button class="btn btn-ghost btn-sm" data-edit="${i.id}" style="margin-left:auto;">Edit</button>` : ''}
+          ${Auth.isManager() ? `<button class="btn btn-ghost btn-sm" data-edit="${i.id}" style="margin-left:auto;">${I18n.t('edit')}</button>` : ''}
         </div>
       </div>`;
   },
@@ -82,32 +82,32 @@ Views.inventory = {
   async adjustQuantity(id, delta) {
     try {
       await api.patch(`/inventory/${id}/quantity`, { delta });
-      showToast(`Stock ${delta > 0 ? 'increased' : 'decreased'}.`, 'success');
+      showToast(delta > 0 ? I18n.t('stock_increased') : I18n.t('stock_decreased'), 'success');
       this.load();
     } catch (err) { showToast(err.message, 'error'); }
   },
 
   openCreateModal() {
     const overlay = openModal(`
-      <div class="modal-header"><h3>Add Product</h3><button class="modal-close" data-close>✕</button></div>
+      <div class="modal-header"><h3>${I18n.t('add_product')}</h3><button class="modal-close" data-close>✕</button></div>
       <form id="inv-form">
         <div class="modal-body">
           <div class="form-grid">
-            <div class="form-row"><label>SKU</label><input id="i-sku" required></div>
-            <div class="form-row"><label>Product name</label><input id="i-name" required></div>
+            <div class="form-row"><label>${I18n.t('sku_label')}</label><input id="i-sku" required></div>
+            <div class="form-row"><label>${I18n.t('product_name')}</label><input id="i-name" required></div>
           </div>
           <div class="form-grid">
-            <div class="form-row"><label>Category</label><input id="i-category" required placeholder="e.g. Dairy"></div>
-            <div class="form-row"><label>Shelf location</label><input id="i-location" required placeholder="e.g. Aisle 4 / Shelf B"></div>
+            <div class="form-row"><label>${I18n.t('category_label')}</label><input id="i-category" required placeholder="e.g. Dairy"></div>
+            <div class="form-row"><label>${I18n.t('shelf_location')}</label><input id="i-location" required placeholder="${I18n.t('shelf_location_ph')}"></div>
           </div>
           <div class="form-grid">
-            <div class="form-row"><label>Starting quantity</label><input type="number" id="i-qty" min="0" value="0" required></div>
-            <div class="form-row"><label>Minimum quantity</label><input type="number" id="i-min" min="0" value="10" required></div>
+            <div class="form-row"><label>${I18n.t('starting_qty')}</label><input type="number" id="i-qty" min="0" value="0" required></div>
+            <div class="form-row"><label>${I18n.t('minimum_qty')}</label><input type="number" id="i-min" min="0" value="10" required></div>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-close>Cancel</button>
-          <button type="submit" class="btn btn-primary">Add Product</button>
+          <button type="button" class="btn btn-secondary" data-close>${I18n.t('cancel')}</button>
+          <button type="submit" class="btn btn-primary">${I18n.t('add_product')}</button>
         </div>
       </form>
     `);
@@ -123,26 +123,26 @@ Views.inventory = {
           quantity: parseInt(document.getElementById('i-qty').value, 10),
           minimumQuantity: parseInt(document.getElementById('i-min').value, 10)
         });
-        closeModal(); showToast('Product added.', 'success'); this.load();
+        closeModal(); showToast(I18n.t('product_added'), 'success'); this.load();
       } catch (err) { showToast(err.message, 'error'); }
     });
   },
 
   openEditModal(item) {
     const overlay = openModal(`
-      <div class="modal-header"><h3>Edit Product</h3><button class="modal-close" data-close>✕</button></div>
+      <div class="modal-header"><h3>${I18n.t('edit')} — ${escapeHtml(item.name)}</h3><button class="modal-close" data-close>✕</button></div>
       <form id="inv-edit-form">
         <div class="modal-body">
-          <div class="form-row"><label>Product name</label><input id="ie-name" value="${escapeHtml(item.name)}" required></div>
+          <div class="form-row"><label>${I18n.t('product_name')}</label><input id="ie-name" value="${escapeHtml(item.name)}" required></div>
           <div class="form-grid">
-            <div class="form-row"><label>Category</label><input id="ie-category" value="${escapeHtml(item.category)}" required></div>
-            <div class="form-row"><label>Location</label><input id="ie-location" value="${escapeHtml(item.location)}" required></div>
+            <div class="form-row"><label>${I18n.t('category_label')}</label><input id="ie-category" value="${escapeHtml(item.category)}" required></div>
+            <div class="form-row"><label>${I18n.t('shelf_location')}</label><input id="ie-location" value="${escapeHtml(item.location)}" required></div>
           </div>
-          <div class="form-row"><label>Minimum quantity</label><input type="number" id="ie-min" value="${item.minimumQuantity}" min="0" required></div>
+          <div class="form-row"><label>${I18n.t('minimum_qty')}</label><input type="number" id="ie-min" value="${item.minimumQuantity}" min="0" required></div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-close>Cancel</button>
-          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="button" class="btn btn-secondary" data-close>${I18n.t('cancel')}</button>
+          <button type="submit" class="btn btn-primary">${I18n.t('save')}</button>
         </div>
       </form>
     `);
@@ -156,7 +156,7 @@ Views.inventory = {
           location: document.getElementById('ie-location').value,
           minimumQuantity: parseInt(document.getElementById('ie-min').value, 10)
         });
-        closeModal(); showToast('Product updated.', 'success'); this.load();
+        closeModal(); showToast(I18n.t('product_updated'), 'success'); this.load();
       } catch (err) { showToast(err.message, 'error'); }
     });
   }

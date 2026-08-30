@@ -3,7 +3,7 @@ Views.dashboard = {
     const user = Auth.getUser();
     root.innerHTML = `
       <div class="greeting-block">
-        <h1>Good ${greetingWord()}, ${escapeHtml(user.name.split(' ')[0])}</h1>
+        <h1>${greeting(user.name.split(' ')[0])}</h1>
         <p>${I18n.t('dash_subtitle')}</p>
       </div>
       <div class="pulse-grid" id="pulse-grid">
@@ -40,24 +40,24 @@ Views.dashboard = {
     const grid = document.getElementById('pulse-grid');
     grid.innerHTML = `
       <div class="pulse-card tasks">
-        <div class="label">📋 Tasks</div>
+        <div class="label">📋 ${I18n.t('pulse_tasks')}</div>
         <div class="figure" id="fig-tasks">0</div>
-        <div class="sub ${d.tasksUrgent > 0 ? 'warn' : ''}">${d.tasksUrgent} urgent · active</div>
+        <div class="sub ${d.tasksUrgent > 0 ? 'warn' : ''}">${d.tasksUrgent} ${I18n.t('urgent_active')}</div>
       </div>
       <div class="pulse-card stock">
-        <div class="label">📦 Stock</div>
+        <div class="label">📦 ${I18n.t('pulse_stock')}</div>
         <div class="figure" id="fig-stock">0</div>
-        <div class="sub ${d.criticalStockProducts > 0 ? 'warn' : ''}">${d.criticalStockProducts} critical / out</div>
+        <div class="sub ${d.criticalStockProducts > 0 ? 'warn' : ''}">${d.criticalStockProducts} ${I18n.t('critical_out')}</div>
       </div>
       <div class="pulse-card deliveries">
-        <div class="label">🚚 Deliveries</div>
+        <div class="label">🚚 ${I18n.t('pulse_deliveries')}</div>
         <div class="figure" id="fig-deliveries">0</div>
-        <div class="sub ${d.deliveriesDelayed > 0 ? 'warn' : ''}">${d.deliveriesDelayed} delayed today</div>
+        <div class="sub ${d.deliveriesDelayed > 0 ? 'warn' : ''}">${d.deliveriesDelayed} ${I18n.t('delayed_today')}</div>
       </div>
       <div class="pulse-card customers">
-        <div class="label">🎧 Customers</div>
+        <div class="label">🎧 ${I18n.t('pulse_customers')}</div>
         <div class="figure" id="fig-customers">0</div>
-        <div class="sub">open issues</div>
+        <div class="sub">${I18n.t('open_issues')}</div>
       </div>
     `;
     animateCount(document.getElementById('fig-tasks'), d.tasksActive);
@@ -69,7 +69,7 @@ Views.dashboard = {
   renderFeed(items) {
     const feed = document.getElementById('activity-feed');
     if (!items.length) {
-      feed.innerHTML = `<div class="state-block"><div class="icon">🌤️</div><p>No recent activity yet.</p></div>`;
+      feed.innerHTML = `<div class="state-block"><div class="icon">🌤️</div><p>${I18n.t('no_recent_activity')}</p></div>`;
       return;
     }
     feed.innerHTML = items.map((item, i) => `
@@ -87,9 +87,8 @@ Views.dashboard = {
   }
 };
 
-function greetingWord() {
+function greeting(name) {
   const h = new Date().getHours();
-  if (h < 12) return 'morning';
-  if (h < 18) return 'afternoon';
-  return 'evening';
+  const key = h < 12 ? 'greeting_morning' : h < 18 ? 'greeting_afternoon' : 'greeting_evening';
+  return I18n.t(key).replace('{name}', escapeHtml(name));
 }
