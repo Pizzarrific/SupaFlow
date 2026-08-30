@@ -35,9 +35,10 @@ services:
         value: "Data Source=storeflow.db"
 
   # ---- Frontend: static HTML/CSS/JS, no build step ----
+  # Static sites on Render are free by default and don't take a "plan" field
+  # at all (that's what the "no such plan 'free'" error is about) — omit it.
   - type: web
     name: storeflow-frontend
     runtime: static
     buildCommand: "true"
     staticPublishPath: ./Frontend
-    plan: free
