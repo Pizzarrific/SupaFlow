@@ -1,0 +1,83 @@
+:root {
+  /* ---- Base surface ---- */
+  --bg: #f5f2ec;
+  --bg-alt: #efeadf;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --border: #e2ddd0;
+  --border-strong: #cfc8b6;
+
+  /* ---- Text ---- */
+  --text-primary: #24211c;
+  --text-secondary: #63594a;
+  --text-muted: #948a76;
+  --text-inverse: #fdfbf6;
+
+  /* ---- Operational accent (amber / hazard-inspired but refined) ---- */
+  --accent: #d9612b;
+  --accent-dark: #b6491c;
+  --accent-light: #fbe4d3;
+  --accent-soft: #fef2e9;
+
+  /* ---- Status colors ---- */
+  --status-urgent: #c62828;
+  --status-urgent-bg: #fbe4e2;
+  --status-high: #d9612b;
+  --status-high-bg: #fbe4d3;
+  --status-medium: #b8860b;
+  --status-medium-bg: #fbf0d3;
+  --status-low: #4a7a5c;
+  --status-low-bg: #e2f0e6;
+
+  --status-ok: #2f7a4f;
+  --status-ok-bg: #e2f2e8;
+  --status-warn: #b8860b;
+  --status-warn-bg: #fbf0d3;
+  --status-critical: #c62828;
+  --status-critical-bg: #fbe4e2;
+  --status-info: #2a5f8f;
+  --status-info-bg: #e3edf6;
+  --status-neutral: #6b6357;
+  --status-neutral-bg: #ece7da;
+
+  /* ---- Category colors ---- */
+  --cat-restocking: #d9612b;
+  --cat-cleaning: #2a8f7f;
+  --cat-inventory: #6a4fb0;
+  --cat-delivery: #2a5f8f;
+  --cat-customer: #c62894;
+  --cat-maintenance: #6b6357;
+  --cat-other: #948a76;
+
+  /* ---- Layout ---- */
+  --sidebar-w: 232px;
+  --topbar-h: 64px;
+  --bottomnav-h: 64px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 3px rgba(36, 33, 28, 0.08);
+  --shadow-md: 0 4px 16px rgba(36, 33, 28, 0.10);
+  --shadow-lg: 0 12px 32px rgba(36, 33, 28, 0.16);
+
+  /* ---- Type ---- */
+  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+
+  /* ---- Motion ---- */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --t-fast: 120ms;
+  --t-med: 220ms;
+}
+
+.dark {
+  --bg: #1b1815;
+  --bg-alt: #211d19;
+  --surface: #262220;
+  --surface-raised: #2c2823;
+  --border: #3a352e;
+  --border-strong: #4a4438;
+  --text-primary: #f5f0e6;
+  --text-secondary: #c9c0ac;
+  --text-muted: #8c8272;
+}

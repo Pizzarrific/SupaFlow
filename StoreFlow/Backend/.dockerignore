@@ -1,0 +1,6 @@
+bin/
+obj/
+storeflow.db
+storeflow.db-shm
+storeflow.db-wal
+*.user

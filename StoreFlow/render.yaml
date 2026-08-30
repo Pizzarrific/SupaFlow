@@ -1,0 +1,43 @@
+# Render "Blueprint" — connect this repo on render.com ("New > Blueprint")
+# and it reads this file automatically, deploying BOTH services below from
+# one dashboard. Every push to your default branch rebuilds and redeploys
+# both automatically, the same "push and it builds" workflow Vercel gives
+# you for static sites, just covering the .NET API too.
+#
+# After the first deploy, two things need a manual follow-up (Render can't
+# know these values until the services exist):
+#   1. Jwt__Key is auto-generated below — nothing to do there.
+#   2. Cors__AllowedOrigins__0 is a placeholder. Once Render gives the
+#      frontend its real URL (e.g. https://storeflow-frontend.onrender.com),
+#      update that env var on storeflow-api and redeploy it.
+#   3. Frontend/js/config.js's STOREFLOW_API_BASE is also a placeholder —
+#      update it to the backend's real URL (e.g.
+#      https://storeflow-api.onrender.com/api), commit, and push.
+
+services:
+  # ---- Backend: ASP.NET Core Web API (Docker) ----
+  - type: web
+    name: storeflow-api
+    runtime: docker
+    dockerfilePath: ./Backend/Dockerfile
+    dockerContext: ./Backend
+    plan: free
+    envVars:
+      - key: Jwt__Key
+        generateValue: true
+      - key: Jwt__Issuer
+        value: StoreFlowApi
+      - key: Jwt__Audience
+        value: StoreFlowClient
+      - key: Cors__AllowedOrigins__0
+        value: https://storeflow-frontend.onrender.com
+      - key: ConnectionStrings__DefaultConnection
+        value: "Data Source=storeflow.db"
+
+  # ---- Frontend: static HTML/CSS/JS, no build step ----
+  - type: web
+    name: storeflow-frontend
+    runtime: static
+    buildCommand: "true"
+    staticPublishPath: ./Frontend
+    plan: free

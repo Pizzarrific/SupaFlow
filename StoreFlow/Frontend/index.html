@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StoreFlow — Store Overview</title>
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/responsive.css">
+<link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+</head>
+<body>
+
+<div id="startup-overlay" class="startup-overlay">
+  <img src="assets/logo.svg" alt="StoreFlow" class="startup-mark-logo">
+  <div class="startup-name">StoreFlow</div>
+  <div class="startup-tagline" data-i18n="tagline">Keep the store moving</div>
+  <div class="startup-progress-track"><div class="startup-progress-fill" id="startup-progress"></div></div>
+  <div class="startup-status" id="startup-status">Waking up the floor…</div>
+</div>
+
+<div class="app-shell">
+  <!-- ================= Sidebar ================= -->
+  <nav class="sidebar" aria-label="Primary navigation">
+    <div class="dynamic-island" id="dynamic-island" role="button" tabindex="0" aria-label="StoreFlow — expand for language settings">
+      <div class="island-collapsed">
+        <img src="assets/logo.svg" alt="" class="island-logo">
+        <span class="island-wordmark">StoreFlow</span>
+      </div>
+      <div class="island-expanded-content">
+        <span class="island-tagline" data-i18n="tagline">Keep the store moving</span>
+        <button class="island-lang-btn" id="lang-toggle-btn" title="Switch language" aria-label="Switch language">
+          🌐 <span data-lang-toggle-label>日本語</span>
+        </button>
+      </div>
+    </div>
+    <div class="sidebar-nav" id="sidebar-nav">
+      <a href="#dashboard" class="nav-item" data-view="dashboard"><span class="icon">🏬</span><span data-i18n="nav_dashboard">Store Overview</span></a>
+      <a href="#tasks" class="nav-item" data-view="tasks"><span class="icon">✅</span><span data-i18n="nav_tasks">My Tasks</span><span class="count hidden" id="nav-count-tasks"></span></a>
+      <a href="#team" class="nav-item" data-view="team"><span class="icon">👥</span><span data-i18n="nav_team">Team Board</span></a>
+      <a href="#employees" class="nav-item" data-view="employees"><span class="icon">🪪</span><span data-i18n="nav_employees">Employees</span></a>
+      <a href="#attendance" class="nav-item" data-view="attendance"><span class="icon">🕒</span><span data-i18n="nav_attendance">Attendance</span></a>
+      <a href="#inventory" class="nav-item" data-view="inventory"><span class="icon">📦</span><span data-i18n="nav_inventory">Inventory</span></a>
+      <a href="#restocking" class="nav-item" data-view="restocking"><span class="icon">🔁</span><span data-i18n="nav_restocking">Restocking</span></a>
+      <a href="#cleaning" class="nav-item" data-view="cleaning"><span class="icon">🧽</span><span data-i18n="nav_cleaning">Cleaning</span></a>
+      <a href="#deliveries" class="nav-item" data-view="deliveries"><span class="icon">🚚</span><span data-i18n="nav_deliveries">Deliveries</span></a>
+      <a href="#customer-service" class="nav-item" data-view="customer-service"><span class="icon">🎧</span><span data-i18n="nav_customerService">Customer Service</span></a>
+      <a href="#reports" class="nav-item" data-view="reports" id="nav-reports"><span class="icon">📊</span><span data-i18n="nav_reports">Reports</span></a>
+    </div>
+    <div class="sidebar-footer">
+      <button class="btn btn-ghost btn-block" id="sidebar-logout">↩ <span data-i18n="logout">Log out</span></button>
+    </div>
+  </nav>
+
+  <div class="main-content">
+    <!-- ================= Topbar ================= -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <div>
+          <div class="store-name">Family Mart</div>
+          <div class="datetime" id="topbar-datetime">—</div>
+        </div>
+        <div class="sync-indicator"><span class="status-dot on-floor pulse"></span> Synced</div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-search dropdown-rel">
+          <span class="icon">🔍</span>
+          <input type="search" id="global-search-input" placeholder="Search tasks, employees, SKUs…" data-i18n-placeholder="search_placeholder" aria-label="Global search" autocomplete="off">
+          <div class="search-panel hidden" id="search-panel"></div>
+        </div>
+        <div class="dropdown-rel">
+          <button class="icon-btn" id="notif-btn" aria-haspopup="true" aria-label="Notifications">
+            🔔<span class="dot hidden" id="notif-dot"></span>
+          </button>
+          <div class="dropdown-panel hidden" id="notif-panel"></div>
+        </div>
+        <div class="dropdown-rel">
+          <button class="profile-btn" id="profile-btn" aria-haspopup="true">
+            <div class="avatar avatar-sm" id="profile-avatar">··</div>
+            <div class="name-block">
+              <div class="emp-name" id="profile-name">—</div>
+              <div class="emp-role" id="profile-role">—</div>
+            </div>
+          </button>
+          <div class="dropdown-panel hidden" id="profile-panel" style="width:220px;"></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ================= View root ================= -->
+    <main class="page-content" id="view-root">
+      <div class="state-block"><div class="icon">⏳</div><p>Loading StoreFlow…</p></div>
+    </main>
+  </div>
+</div>
+
+<!-- ================= Bottom nav (mobile) ================= -->
+<nav class="bottom-nav" aria-label="Mobile navigation">
+  <a href="#dashboard" class="bn-item" data-view="dashboard"><span class="icon">🏬</span>Overview</a>
+  <a href="#tasks" class="bn-item" data-view="tasks"><span class="icon">✅</span>Tasks</a>
+  <a href="#attendance" class="bn-item" data-view="attendance"><span class="icon">🕒</span>Clock</a>
+  <a href="#inventory" class="bn-item" data-view="inventory"><span class="icon">📦</span>Stock</a>
+  <button class="bn-item more-btn" id="mobile-more-btn"><span class="icon">☰</span>More</button>
+</nav>
+
+<script src="js/config.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/state.js"></script>
+<script src="js/components/toast.js"></script>
+<script src="js/components/modal.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/search.js"></script>
+<script src="js/views/dashboard.js"></script>
+<script src="js/views/tasks.js"></script>
+<script src="js/views/team.js"></script>
+<script src="js/views/employees.js"></script>
+<script src="js/views/attendance.js"></script>
+<script src="js/views/inventory.js"></script>
+<script src="js/views/restocking.js"></script>
+<script src="js/views/cleaning.js"></script>
+<script src="js/views/deliveries.js"></script>
+<script src="js/views/customerService.js"></script>
+<script src="js/views/reports.js"></script>
+<script src="js/router.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

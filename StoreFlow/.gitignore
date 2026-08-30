@@ -1,0 +1,15 @@
+# .NET
+Backend/bin/
+Backend/obj/
+Backend/storeflow.db
+Backend/storeflow.db-shm
+Backend/storeflow.db-wal
+*.user
+
+# Env
+.env
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/

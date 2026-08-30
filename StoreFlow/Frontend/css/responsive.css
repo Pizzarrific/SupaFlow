@@ -1,0 +1,31 @@
+@media (max-width: 1180px) {
+  .pulse-grid { grid-template-columns: repeat(2, 1fr); }
+  .two-col { grid-template-columns: 1fr; }
+  .board-columns { grid-template-columns: repeat(2, 1fr); }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 900px) {
+  .profile-btn .name-block { display: block; }
+}
+
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .main-content { margin-left: 0; }
+  .bottom-nav { display: flex; }
+  .page-content { padding-bottom: calc(var(--bottomnav-h) + 1.4rem); }
+  .topbar-search { display: none; }
+  .topbar { margin: 0.7rem 0.7rem 0; }
+}
+
+@media (max-width: 640px) {
+  .pulse-grid { grid-template-columns: 1fr 1fr; gap: 0.7rem; }
+  .board-columns { grid-template-columns: 1fr; }
+  .card-grid { grid-template-columns: 1fr; }
+  .kpi-grid { grid-template-columns: 1fr 1fr; }
+  .modal { max-width: 100%; margin: 0.5rem; }
+  .form-grid { grid-template-columns: 1fr; }
+  .clock-time { font-size: 2.2rem; }
+  .page-header { flex-direction: column; align-items: stretch; }
+  .search-panel, .dropdown-panel { width: calc(100vw - 2rem); left: 1rem; right: 1rem; }
+}
