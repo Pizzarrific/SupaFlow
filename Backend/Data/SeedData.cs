@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
-using StoreFlow.Api.Helpers;
-using StoreFlow.Api.Models;
+using Supaflow.Api.Helpers;
+using Supaflow.Api.Models;
 
-namespace StoreFlow.Api.Data;
+namespace Supaflow.Api.Data;
 
 public static class SeedData
 {
-    public static async Task SeedAsync(StoreFlowContext context)
+    public static async Task SeedAsync(SupaflowContext context)
     {
         if (await context.Users.AnyAsync()) return; // already seeded
 
@@ -16,43 +16,43 @@ public static class SeedData
         // ---- Employees ----
         var manager = new User
         {
-            EmployeeId = "STF0001", Name = "Sato Morgan", Email = "manager@storeflow.local",
+            EmployeeId = "STF0001", Name = "佐藤 学", Email = "manager@supaflow.local",
             Phone = "555 0101", PasswordHash = demoPasswordHash, Role = UserRole.Manager,
-            Department = "Management", JobTitle = "Store Manager", EmploymentStatus = EmploymentStatus.Active,
+            Department = "管理部", JobTitle = "店長", EmploymentStatus = EmploymentStatus.Active,
             DateJoined = now.AddYears(-3), CurrentStatus = ShiftStatus.OnFloor, LastLoginAt = now.AddHours(-2)
         };
 
         var employee1 = new User
         {
-            EmployeeId = "STF0002", Name = "Sarah Williams", Email = "employee@storeflow.local",
+            EmployeeId = "STF0002", Name = "鈴木 さくら", Email = "employee@supaflow.local",
             Phone = "555 0102", PasswordHash = demoPasswordHash, Role = UserRole.Employee,
-            Department = "Checkout", JobTitle = "Cashier", EmploymentStatus = EmploymentStatus.Active,
+            Department = "レジ", JobTitle = "レジ担当", EmploymentStatus = EmploymentStatus.Active,
             DateJoined = now.AddYears(-1).AddMonths(-2), CurrentStatus = ShiftStatus.OnFloor, LastLoginAt = now.AddHours(-1)
         };
 
         var employees = new List<User> { manager, employee1 };
 
-        var extra = new (string Name, string Dept, string Title)[]
+        var extra = new (string Name, string Dept, string Title, string Email)[]
         {
-            ("Aisha Khan", "Customer Service", "Customer Service Associate"),
-            ("Daniel Tanaka", "Dairy", "Stock Associate"),
-            ("Maya Patel", "Produce", "Produce Associate"),
-            ("Kenji Sato", "Warehouse", "Warehouse Associate"),
-            ("Liam O'Connor", "Bakery", "Baker"),
-            ("Priya Sharma", "Meat", "Butcher Associate"),
-            ("Noah Becker", "Frozen", "Stock Associate"),
-            ("Emma Novak", "Grocery", "Grocery Associate")
+            ("高橋 愛", "カスタマーサービス", "接客担当", "takahashi.ai@supaflow.local"),
+            ("田中 大輔", "乳製品", "品出し担当", "tanaka.daisuke@supaflow.local"),
+            ("渡辺 真央", "青果", "青果担当", "watanabe.mao@supaflow.local"),
+            ("伊藤 健二", "倉庫", "倉庫担当", "ito.kenji@supaflow.local"),
+            ("中村 涼", "ベーカリー", "パン職人", "nakamura.ryo@supaflow.local"),
+            ("小林 舞", "精肉", "精肉担当", "kobayashi.mai@supaflow.local"),
+            ("山本 直樹", "冷凍食品", "品出し担当", "yamamoto.naoki@supaflow.local"),
+            ("吉田 美咲", "食料品", "食料品担当", "yoshida.misaki@supaflow.local")
         };
 
         var statuses = new[] { ShiftStatus.OnFloor, ShiftStatus.OnBreak, ShiftStatus.OffShift, ShiftStatus.Busy };
         int idx = 3;
-        foreach (var (name, dept, title) in extra)
+        foreach (var (name, dept, title, email) in extra)
         {
             employees.Add(new User
             {
                 EmployeeId = $"STF{idx:D4}",
                 Name = name,
-                Email = BuildEmail(name),
+                Email = email,
                 Phone = $"555 01{idx:D2}",
                 PasswordHash = demoPasswordHash,
                 Role = UserRole.Employee,
@@ -82,36 +82,36 @@ public static class SeedData
         // ---- Inventory ----
         var productSeed = new (string Name, string Category, string Location)[]
         {
-            ("Milk 1L", "Dairy", "Aisle 4 / Shelf B"),
-            ("Bread", "Bakery", "Aisle 1 / Shelf A"),
-            ("Eggs 12 Pack", "Dairy", "Aisle 4 / Shelf C"),
-            ("Rice 5kg", "Grocery", "Aisle 6 / Shelf A"),
-            ("Chicken Breast", "Meat", "Aisle 9 / Cooler 2"),
-            ("Apples", "Produce", "Aisle 0 / Bin 3"),
-            ("Bananas", "Produce", "Aisle 0 / Bin 1"),
-            ("Frozen Peas", "Frozen", "Aisle 10 / Freezer 2"),
-            ("Orange Juice", "Dairy", "Aisle 4 / Shelf D"),
-            ("Coffee", "Grocery", "Aisle 7 / Shelf B"),
-            ("Toilet Paper", "Household", "Aisle 12 / Shelf A"),
-            ("Dish Soap", "Household", "Aisle 12 / Shelf C"),
-            ("Cheddar Cheese", "Dairy", "Aisle 4 / Shelf A"),
-            ("Ground Beef", "Meat", "Aisle 9 / Cooler 1"),
-            ("Salmon Fillet", "Meat", "Aisle 9 / Cooler 3"),
-            ("Tomatoes", "Produce", "Aisle 0 / Bin 5"),
-            ("Potatoes 2kg", "Produce", "Aisle 0 / Bin 6"),
-            ("Frozen Pizza", "Frozen", "Aisle 10 / Freezer 1"),
-            ("Ice Cream", "Frozen", "Aisle 10 / Freezer 4"),
-            ("Pasta", "Grocery", "Aisle 6 / Shelf C"),
-            ("Pasta Sauce", "Grocery", "Aisle 6 / Shelf D"),
-            ("Cereal", "Grocery", "Aisle 5 / Shelf A"),
-            ("Croissants", "Bakery", "Aisle 1 / Shelf B"),
-            ("Bagels", "Bakery", "Aisle 1 / Shelf C"),
-            ("Yogurt 4 Pack", "Dairy", "Aisle 4 / Shelf E"),
-            ("Butter", "Dairy", "Aisle 4 / Shelf F"),
-            ("Paper Towels", "Household", "Aisle 12 / Shelf B"),
-            ("Laundry Detergent", "Household", "Aisle 13 / Shelf A"),
-            ("Sparkling Water", "Beverages", "Aisle 8 / Shelf A"),
-            ("Orange Soda", "Beverages", "Aisle 8 / Shelf B")
+            ("牛乳 1L", "乳製品", "4番通路 / B棚"),
+            ("食パン", "ベーカリー", "1番通路 / A棚"),
+            ("卵 12個パック", "乳製品", "4番通路 / C棚"),
+            ("米 5kg", "食料品", "6番通路 / A棚"),
+            ("鶏むね肉", "精肉", "9番通路 / 冷蔵ケース2"),
+            ("りんご", "青果", "0番通路 / カゴ3"),
+            ("バナナ", "青果", "0番通路 / カゴ1"),
+            ("冷凍グリーンピース", "冷凍食品", "10番通路 / 冷凍ケース2"),
+            ("オレンジジュース", "乳製品", "4番通路 / D棚"),
+            ("コーヒー", "食料品", "7番通路 / B棚"),
+            ("トイレットペーパー", "日用品", "12番通路 / A棚"),
+            ("食器用洗剤", "日用品", "12番通路 / C棚"),
+            ("チェダーチーズ", "乳製品", "4番通路 / A棚"),
+            ("牛ひき肉", "精肉", "9番通路 / 冷蔵ケース1"),
+            ("鮭の切り身", "精肉", "9番通路 / 冷蔵ケース3"),
+            ("トマト", "青果", "0番通路 / カゴ5"),
+            ("じゃがいも 2kg", "青果", "0番通路 / カゴ6"),
+            ("冷凍ピザ", "冷凍食品", "10番通路 / 冷凍ケース1"),
+            ("アイスクリーム", "冷凍食品", "10番通路 / 冷凍ケース4"),
+            ("パスタ", "食料品", "6番通路 / C棚"),
+            ("パスタソース", "食料品", "6番通路 / D棚"),
+            ("シリアル", "食料品", "5番通路 / A棚"),
+            ("クロワッサン", "ベーカリー", "1番通路 / B棚"),
+            ("ベーグル", "ベーカリー", "1番通路 / C棚"),
+            ("ヨーグルト 4個パック", "乳製品", "4番通路 / E棚"),
+            ("バター", "乳製品", "4番通路 / F棚"),
+            ("ペーパータオル", "日用品", "12番通路 / B棚"),
+            ("洗濯洗剤", "日用品", "13番通路 / A棚"),
+            ("炭酸水", "飲料", "8番通路 / A棚"),
+            ("オレンジソーダ", "飲料", "8番通路 / B棚")
         };
 
         var inventoryItems = new List<InventoryItem>();
@@ -150,14 +150,14 @@ public static class SeedData
         var priorities = Enum.GetValues<TaskPriority>();
         var taskTitles = new[]
         {
-            "Restock milk aisle", "Clean produce section spill", "Count dairy inventory", "Check delivery dock 2",
-            "Assist customer in electronics", "Restock frozen aisle", "Deep clean checkout lanes", "Update bakery price tags",
-            "Restock rice and pasta shelf", "Check expiry dates in dairy", "Refill bagging stations", "Sanitize restrooms",
-            "Restock beverages aisle", "Report broken freezer door", "Organize warehouse pallets", "Restock produce apples",
-            "Clean up aisle 6 spill", "Verify delivery DLV2048 contents", "Restock meat cooler", "Update shelf labels in grocery",
-            "Assist with price mismatch complaint", "Sweep entrance area", "Restock paper goods", "Check freezer temperature logs",
-            "Prepare bakery display", "Restock cereal aisle", "Clean dairy cooler glass", "Log damaged goods in produce",
-            "Restock household aisle", "Follow up on refund request"
+            "牛乳売り場の補充", "青果コーナーの液体をこぼした箇所を清掃", "乳製品の在庫確認", "搬入口2の配送確認",
+            "電化製品コーナーで接客対応", "冷凍食品売り場の補充", "レジ周りの徹底清掃", "ベーカリーの値札更新",
+            "米・パスタ棚の補充", "乳製品の賞味期限確認", "レジ袋の補充", "トイレの消毒",
+            "飲料売り場の補充", "冷凍庫の扉故障を報告", "倉庫のパレット整理", "りんごの補充",
+            "6番通路の液体をこぼした箇所を清掃", "配送DLV2048の内容確認", "精肉冷蔵ケースの補充", "食料品売り場の棚札更新",
+            "価格相違の苦情対応", "入口周辺の清掃", "紙製品の補充", "冷凍庫の温度記録確認",
+            "ベーカリーの陳列準備", "シリアル売り場の補充", "乳製品冷蔵ケースのガラス清掃", "青果の破損商品記録",
+            "日用品売り場の補充", "返金対応のフォローアップ"
         };
 
         var tasksList = new List<TaskItem>();
@@ -177,7 +177,7 @@ public static class SeedData
             var task = new TaskItem
             {
                 Title = taskTitles[i],
-                Description = $"{taskTitles[i]} — logged during floor walk.",
+                Description = $"{taskTitles[i]}（フロア巡回時に記録）",
                 Category = categories[rnd.Next(categories.Length)],
                 Priority = priorities[rnd.Next(priorities.Length)],
                 Status = status,
@@ -200,7 +200,7 @@ public static class SeedData
             {
                 TaskId = t.Id,
                 UserId = manager.Id,
-                Comment = $"@{staff[0].Name.Split(' ')[0]} please prioritize this before the afternoon rush.",
+                Comment = $"@{staff[0].Name.Split(' ')[0]}さん、午後の忙しい時間帯前に優先して対応してください。",
                 CreatedAt = t.CreatedAt.AddHours(1)
             });
         }
@@ -230,7 +230,7 @@ public static class SeedData
         await context.SaveChangesAsync();
 
         // ---- Cleaning tasks (10 areas) ----
-        var areas = new[] { "Entrance", "Produce", "Dairy", "Bakery", "Meat", "Frozen", "Checkout", "Restrooms", "Warehouse", "Aisle 7" };
+        var areas = new[] { "入口", "青果", "乳製品", "ベーカリー", "精肉", "冷凍食品", "レジ", "トイレ", "倉庫", "7番通路" };
         var cleaningStatuses = Enum.GetValues<CleaningStatus>();
         foreach (var area in areas)
         {
@@ -250,8 +250,8 @@ public static class SeedData
         await context.SaveChangesAsync();
 
         // ---- Deliveries (8) ----
-        var suppliers = new[] { "FreshFoods Ltd.", "Golden Valley Dairy", "Metro Bakery Supply", "Coastal Seafood Co.",
-            "Prime Meats Inc.", "GreenLeaf Produce", "NorthStar Beverages", "EverStock Household Goods" };
+        var suppliers = new[] { "フレッシュフーズ", "ゴールデンバレー乳業", "メトロベーカリー資材", "コースタルシーフード",
+            "プライムミート", "グリーンリーフ青果", "ノーススター飲料", "エバーストック日用品" };
         var deliveryStatuses = new[] { DeliveryStatus.Scheduled, DeliveryStatus.InTransit, DeliveryStatus.Arriving,
             DeliveryStatus.Arrived, DeliveryStatus.Checking, DeliveryStatus.Completed, DeliveryStatus.Delayed, DeliveryStatus.InTransit };
         for (int i = 0; i < suppliers.Length; i++)
@@ -266,15 +266,15 @@ public static class SeedData
                 ActualArrival = status is DeliveryStatus.Arrived or DeliveryStatus.Completed ? expected.AddMinutes(rnd.Next(-10, 30)) : null,
                 Dock = $"{(i % 3) + 1}",
                 Status = status,
-                Notes = status == DeliveryStatus.Delayed ? "Traffic delay reported by driver." : null,
+                Notes = status == DeliveryStatus.Delayed ? "運転手より渋滞による遅延の報告あり。" : null,
                 CreatedAt = expected.AddHours(-3)
             };
-            delivery.Events.Add(new DeliveryEvent { Label = "Order dispatched", OccurredAt = expected.AddHours(-3) });
-            delivery.Events.Add(new DeliveryEvent { Label = "Truck departed", OccurredAt = expected.AddHours(-1.5) });
+            delivery.Events.Add(new DeliveryEvent { Label = "発注しました", OccurredAt = expected.AddHours(-3) });
+            delivery.Events.Add(new DeliveryEvent { Label = "トラックが出発しました", OccurredAt = expected.AddHours(-1.5) });
             if (status != DeliveryStatus.Scheduled)
-                delivery.Events.Add(new DeliveryEvent { Label = "Approaching store", OccurredAt = expected.AddMinutes(-20) });
+                delivery.Events.Add(new DeliveryEvent { Label = "店舗に接近中です", OccurredAt = expected.AddMinutes(-20) });
             if (status == DeliveryStatus.Delayed)
-                delivery.Events.Add(new DeliveryEvent { Label = "Delay reported", OccurredAt = expected.AddMinutes(-10) });
+                delivery.Events.Add(new DeliveryEvent { Label = "遅延が報告されました", OccurredAt = expected.AddMinutes(-10) });
             context.Deliveries.Add(delivery);
         }
         await context.SaveChangesAsync();
@@ -283,18 +283,18 @@ public static class SeedData
         var issueTypes = Enum.GetValues<CustomerIssueType>();
         var issueDescriptions = new[]
         {
-            "Customer asking whether gluten free bread is in stock.",
-            "Customer complaint about long checkout wait time.",
-            "Refund requested for spoiled milk purchased yesterday.",
-            "Customer reports missing item from online pickup order.",
-            "Price mismatch on discounted cereal box vs shelf tag.",
-            "Customer requested assistance finding electronics section.",
-            "Complaint about rude interaction at deli counter.",
-            "Refund requested — wrong item delivered.",
-            "Customer asking about bulk order for rice.",
-            "Missing product: advertised sale item not on shelf."
+            "グルテンフリーパンの在庫についての質問。",
+            "レジの待ち時間が長いという苦情。",
+            "昨日購入した牛乳が傷んでいたため返金希望。",
+            "オンライン受け取り注文の商品が不足しているとの報告。",
+            "割引シリアルの価格が棚札と異なっている。",
+            "電化製品コーナーでの接客を希望。",
+            "精肉コーナーでの対応についての苦情。",
+            "誤った商品が届いたため返金希望。",
+            "米のまとめ買いについての問い合わせ。",
+            "セール対象商品が棚に見当たらないとの報告。"
         };
-        var departments = new[] { "Grocery", "Bakery", "Dairy", "Electronics", "Checkout", "Deli", "Produce", "Customer Service", "Grocery", "Meat" };
+        var departments = new[] { "食料品", "ベーカリー", "乳製品", "電化製品", "レジ", "惣菜", "青果", "カスタマーサービス", "食料品", "精肉" };
         var issueStatuses = Enum.GetValues<CustomerIssueStatus>();
 
         for (int i = 0; i < issueDescriptions.Length; i++)
@@ -347,14 +347,14 @@ public static class SeedData
         var notifTargets = staff.Concat(new[] { manager }).ToList();
         var notifTemplates = new (NotificationType Type, string Title, string Message)[]
         {
-            (NotificationType.TaskAssigned, "New task assigned", "You were assigned: Restock milk aisle"),
-            (NotificationType.TaskUrgent, "Urgent task", "Frozen aisle spill needs immediate attention"),
-            (NotificationType.StockCritical, "Low stock alert", "Chicken Breast is now Critical"),
-            (NotificationType.DeliveryDelayed, "Delivery delayed", "DLV2044 is running behind schedule"),
-            (NotificationType.IssueAssigned, "Customer issue assigned", "Refund request needs your attention"),
-            (NotificationType.Mention, "You were mentioned", "Sato Morgan mentioned you on a task"),
-            (NotificationType.TaskCompleted, "Task completed", "Dairy inventory count marked complete"),
-            (NotificationType.General, "Shift reminder", "Your shift starts in 30 minutes")
+            (NotificationType.TaskAssigned, "新しいタスクが割り当てられました", "牛乳売り場の補充が割り当てられました"),
+            (NotificationType.TaskUrgent, "緊急タスク", "冷凍食品売り場の液体漏れに至急対応してください"),
+            (NotificationType.StockCritical, "在庫不足の警告", "鶏むね肉が危険な在庫水準です"),
+            (NotificationType.DeliveryDelayed, "配送遅延", "DLV2044の到着が遅れています"),
+            (NotificationType.IssueAssigned, "顧客対応が割り当てられました", "返金対応の確認をお願いします"),
+            (NotificationType.Mention, "メンションされました", "佐藤学さんがタスクであなたをメンションしました"),
+            (NotificationType.TaskCompleted, "タスク完了", "乳製品の在庫確認が完了しました"),
+            (NotificationType.General, "シフトのお知らせ", "30分後にシフトが始まります")
         };
 
         for (int i = 0; i < 20; i++)
@@ -376,8 +376,8 @@ public static class SeedData
         // ---- Activity logs ----
         var actionSamples = new[]
         {
-            "Clocked in", "Completed restocking task", "Marked cleaning task complete", "Created task",
-            "Updated customer issue status", "Adjusted stock quantity", "Commented on task", "Clocked out"
+            "出勤しました", "補充タスクを完了しました", "清掃タスクを完了にしました", "タスクを作成しました",
+            "顧客対応のステータスを更新しました", "在庫数を調整しました", "タスクにコメントしました", "退勤しました"
         };
         for (int i = 0; i < 40; i++)
         {
@@ -391,11 +391,5 @@ public static class SeedData
             });
         }
         await context.SaveChangesAsync();
-    }
-
-    private static string BuildEmail(string name)
-    {
-        var cleaned = name.ToLower().Replace(" ", ".").Replace("'", "");
-        return $"{cleaned}@storeflow.local";
     }
 }

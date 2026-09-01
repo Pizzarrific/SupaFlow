@@ -1,4 +1,4 @@
-namespace StoreFlow.Api.Helpers;
+namespace Supaflow.Api.Helpers;
 
 public static class PasswordHasher
 {

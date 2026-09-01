@@ -5,13 +5,13 @@ Views.employees = {
     const isManager = Auth.isManager();
     root.innerHTML = `
       <div class="page-header">
-        <div><h1 data-i18n="emp_title">Employee Directory</h1><p class="subtitle" data-i18n="emp_subtitle">Every StoreFlow employee ID, department, and status.</p></div>
+        <div><h1 data-i18n="emp_title">Employee Directory</h1><p class="subtitle" data-i18n="emp_subtitle">Every Supaflow employee ID, department, and status.</p></div>
         ${isManager ? `<button class="btn btn-primary" id="add-emp-btn">➕ ${I18n.t('add_employee')}</button>` : ''}
       </div>
       ${isManager ? `<div class="kpi-grid" id="emp-stats">${Array(4).fill('<div class="skeleton skeleton-card"></div>').join('')}</div>` : ''}
       <div class="filter-bar">
         <div class="search-input-wrap"><span class="icon">🔍</span><input type="search" id="emp-search" placeholder="${I18n.t('search_employees')}"></div>
-        <select id="emp-filter-dept"><option value="">${I18n.t('filter_all_departments')}</option>${['Produce','Dairy','Bakery','Meat','Frozen','Grocery','Checkout','Customer Service','Warehouse','Management','Household','Beverages'].map(d => `<option>${d}</option>`).join('')}</select>
+        <select id="emp-filter-dept"><option value="">${I18n.t('filter_all_departments')}</option>${['管理部','レジ','カスタマーサービス','乳製品','青果','倉庫','ベーカリー','精肉','冷凍食品','食料品','日用品','飲料'].map(d => `<option>${d}</option>`).join('')}</select>
         <select id="emp-filter-status"><option value="">${I18n.t('filter_all_statuses')}</option><option value="Active">${humanizeEnum('Active')}</option><option value="OnLeave">${humanizeEnum('OnLeave')}</option><option value="Suspended">${humanizeEnum('Suspended')}</option><option value="Inactive">${humanizeEnum('Inactive')}</option></select>
       </div>
       <div class="card-grid" id="emp-grid">${Array(8).fill('<div class="skeleton skeleton-card"></div>').join('')}</div>
@@ -79,7 +79,7 @@ Views.employees = {
           </div>
           <div class="form-grid">
             <div class="form-row"><label for="e-dept">${I18n.t('department_label')}</label>
-              <select id="e-dept">${['Produce','Dairy','Bakery','Meat','Frozen','Grocery','Checkout','Customer Service','Warehouse','Management','IT / Support'].map(d => `<option>${d}</option>`).join('')}</select>
+              <select id="e-dept">${['管理部','レジ','カスタマーサービス','乳製品','青果','倉庫','ベーカリー','精肉','冷凍食品','食料品','IT・サポート'].map(d => `<option>${d}</option>`).join('')}</select>
             </div>
             <div class="form-row"><label for="e-title">${I18n.t('job_role')}</label><input id="e-title" placeholder="${I18n.t('job_role_ph')}" required></div>
           </div>
@@ -152,7 +152,7 @@ Views.employees = {
         <h3 style="margin-bottom:0.4rem;">${I18n.t('work_info')}</h3>
         <p class="text-secondary" style="font-size:0.86rem; margin-bottom:1rem;">
           ${I18n.t('department_label')}: ${escapeHtml(p.department)}<br>
-          ${I18n.t('job_role')}: ${escapeHtml(p.jobTitle)} (${p.role})<br>
+          ${I18n.t('job_role')}: ${escapeHtml(p.jobTitle)} (${humanizeEnum(p.role)})<br>
           ${I18n.t('manager_colon')} ${escapeHtml(p.managerName || '—')}<br>
           ${I18n.t('date_joined_colon')} ${new Date(p.dateJoined).toLocaleDateString()}
         </p>
@@ -253,14 +253,14 @@ Views.employees = {
       <div class="modal-body">
         <div class="id-card-wrap">
           <div class="id-card" id="printable-id-card">
-            <div class="brand">STOREFLOW</div>
+            <div class="brand">SUPAFLOW</div>
             <div class="sub-brand">EMPLOYEE IDENTIFICATION</div>
             <div class="photo">${Auth.initials(p.name)}</div>
             <div class="id-name">${escapeHtml(p.name)}</div>
             <div class="id-role">${escapeHtml(p.jobTitle || p.department)}</div>
             <div class="id-number">${p.employeeId}</div>
             <div class="id-status">${p.employmentStatus === 'Active' ? I18n.t('active_employee') : humanizeEnum(p.employmentStatus)}</div>
-            <div class="store-footer">STOREFLOW SUPERMARKET</div>
+            <div class="store-footer">SUPAFLOW SUPERMARKET</div>
           </div>
         </div>
       </div>
@@ -272,7 +272,7 @@ Views.employees = {
     overlay.querySelectorAll('[data-close]').forEach(b => b.onclick = closeModal);
     overlay.querySelector('#print-id-btn').onclick = () => {
       const w = window.open('', '_blank', 'width=420,height=640');
-      w.document.write(`<html><head><title>${p.employeeId} — StoreFlow ID</title>
+      w.document.write(`<html><head><title>${p.employeeId} — Supaflow ID</title>
         <link rel="stylesheet" href="css/variables.css"><link rel="stylesheet" href="css/layout.css">
         <style>body{display:flex;align-items:center;justify-content:center;padding:2rem;background:#fff;}</style>
         </head><body>${document.getElementById('printable-id-card').outerHTML}</body></html>`);

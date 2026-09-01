@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "StoreFlow.Api": {
+    "Supaflow.Api": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": false,

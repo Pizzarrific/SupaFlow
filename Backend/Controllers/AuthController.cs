@@ -1,22 +1,22 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using StoreFlow.Api.Data;
-using StoreFlow.Api.DTOs;
-using StoreFlow.Api.Helpers;
-using StoreFlow.Api.Services;
+using Supaflow.Api.Data;
+using Supaflow.Api.DTOs;
+using Supaflow.Api.Helpers;
+using Supaflow.Api.Services;
 
-namespace StoreFlow.Api.Controllers;
+namespace Supaflow.Api.Controllers;
 
 [ApiController]
 [Route("api/auth")]
 public class AuthController : ControllerBase
 {
-    private readonly StoreFlowContext _context;
+    private readonly SupaflowContext _context;
     private readonly JwtTokenGenerator _tokenGenerator;
     private readonly ICurrentUserService _currentUser;
 
-    public AuthController(StoreFlowContext context, JwtTokenGenerator tokenGenerator, ICurrentUserService currentUser)
+    public AuthController(SupaflowContext context, JwtTokenGenerator tokenGenerator, ICurrentUserService currentUser)
     {
         _context = context;
         _tokenGenerator = tokenGenerator;

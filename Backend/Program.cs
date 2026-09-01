@@ -2,10 +2,10 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using StoreFlow.Api.Data;
-using StoreFlow.Api.Helpers;
-using StoreFlow.Api.Middleware;
-using StoreFlow.Api.Services;
+using Supaflow.Api.Data;
+using Supaflow.Api.Helpers;
+using Supaflow.Api.Middleware;
+using Supaflow.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +25,7 @@ builder.Services.AddControllers().AddJsonOptions(opts =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<StoreFlowContext>(options =>
+builder.Services.AddDbContext<SupaflowContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddHttpContextAccessor();
@@ -58,7 +58,7 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("StoreFlowFrontend", policy =>
+    options.AddPolicy("SupaflowFrontend", policy =>
     {
         policy.WithOrigins(allowedOrigins)
               .AllowAnyHeader()
@@ -77,7 +77,7 @@ var app = builder.Build();
 // on most hosts anyway (recreated on every deploy).
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<StoreFlowContext>();
+    var db = scope.ServiceProvider.GetRequiredService<SupaflowContext>();
     db.Database.EnsureCreated();
     await SeedData.SeedAsync(db);
 }
@@ -91,7 +91,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("StoreFlowFrontend");
+app.UseCors("SupaflowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

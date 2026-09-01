@@ -1,4 +1,4 @@
-namespace StoreFlow.Api.DTOs;
+namespace Supaflow.Api.DTOs;
 
 public class CreateTaskRequest
 {

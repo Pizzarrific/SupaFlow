@@ -1,5 +1,5 @@
 // ================= Lightweight i18n =================
-// Translates StoreFlow's UI chrome (nav, headers, buttons, login) between
+// Translates Supaflow's UI chrome (nav, headers, buttons, login) between
 // English and Japanese. Data coming from the API (task titles, product
 // names, employee names, status/category enum values) is real content,
 // not UI copy, so it is intentionally left as-is.
@@ -12,7 +12,7 @@ const DICT = {
     nav_restocking: 'Restocking', nav_cleaning: 'Cleaning', nav_deliveries: 'Deliveries',
     nav_customerService: 'Customer Service', nav_reports: 'Reports', logout: 'Log out',
     search_placeholder: 'Search tasks, employees, SKUs…', notifications: 'Notifications',
-    lang_toggle: '日本語',
+    lang_toggle: 'English',
 
     dash_subtitle: "Here's what needs attention on the floor.",
     dash_attention: 'What needs attention?', dash_quick_actions: 'Quick actions',
@@ -20,7 +20,7 @@ const DICT = {
 
     tasks_title: 'My Tasks', tasks_subtitle: 'Drag cards between columns to update status.', add_task: 'Add Task',
     team_title: 'Team Board', team_subtitle: "Who's on the floor right now.",
-    emp_title: 'Employee Directory', emp_subtitle: 'Every StoreFlow employee ID, department, and status.', add_employee: 'Add Employee',
+    emp_title: 'Employee Directory', emp_subtitle: 'Every Supaflow employee ID, department, and status.', add_employee: 'Add Employee',
     att_title: 'Attendance', att_subtitle: 'Clock in, take breaks, and track your hours.',
     inv_title: 'Inventory', inv_subtitle: 'Live stock levels across the store.', add_product: 'Add Product',
     rs_title: 'Restocking Queue', rs_subtitle: 'Work through low stock products, shelf by shelf.',
@@ -135,7 +135,7 @@ const DICT = {
     nav_restocking: '補充', nav_cleaning: '清掃', nav_deliveries: '配送',
     nav_customerService: 'カスタマーサービス', nav_reports: 'レポート', logout: 'ログアウト',
     search_placeholder: 'タスク・従業員・SKUを検索…', notifications: '通知',
-    lang_toggle: 'English',
+    lang_toggle: '日本語',
 
     dash_subtitle: '現場で対応が必要な項目です。',
     dash_attention: '対応が必要な項目', dash_quick_actions: 'クイックアクション',
@@ -143,7 +143,7 @@ const DICT = {
 
     tasks_title: 'マイタスク', tasks_subtitle: 'カードをドラッグしてステータスを変更できます。', add_task: 'タスクを追加',
     team_title: 'チームボード', team_subtitle: '現在フロアにいるメンバー。',
-    emp_title: '従業員ディレクトリ', emp_subtitle: 'StoreFlowの全従業員ID・部門・ステータス。', add_employee: '従業員を追加',
+    emp_title: '従業員ディレクトリ', emp_subtitle: 'Supaflowの全従業員ID・部門・ステータス。', add_employee: '従業員を追加',
     att_title: '勤怠', att_subtitle: '出退勤・休憩・勤務時間を記録します。',
     inv_title: '在庫', inv_subtitle: '店舗全体のリアルタイム在庫状況。', add_product: '商品を追加',
     rs_title: '補充キュー', rs_subtitle: '在庫の少ない商品を棚ごとに処理します。',
@@ -267,7 +267,8 @@ const ENUM_JA = {
   MissingProduct: '商品の欠品', PriceMismatch: '価格相違', AssistanceRequested: '接客希望',
   Open: '未対応', Waiting: '保留', Resolved: '解決済み',
   Active: '在籍中', OnLeave: '休職中', Suspended: '停止中', Inactive: '退職済み',
-  OffShift: '勤務外', OnFloor: '勤務中', OnBreak: '休憩中', Busy: '対応中'
+  OffShift: '勤務外', OnFloor: '勤務中', OnBreak: '休憩中', Busy: '対応中',
+  Manager: 'マネージャー', Employee: '従業員'
 };
 
 const I18n = {

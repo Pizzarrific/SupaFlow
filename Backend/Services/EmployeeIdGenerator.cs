@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using StoreFlow.Api.Data;
+using Supaflow.Api.Data;
 
-namespace StoreFlow.Api.Services;
+namespace Supaflow.Api.Services;
 
 public interface IEmployeeIdGenerator
 {
@@ -12,10 +12,10 @@ public interface IEmployeeIdGenerator
 // concurrent employee creation can never produce a duplicate id.
 public class EmployeeIdGenerator : IEmployeeIdGenerator
 {
-    private readonly StoreFlowContext _context;
+    private readonly SupaflowContext _context;
     private static readonly SemaphoreSlim _lock = new(1, 1);
 
-    public EmployeeIdGenerator(StoreFlowContext context)
+    public EmployeeIdGenerator(SupaflowContext context)
     {
         _context = context;
     }

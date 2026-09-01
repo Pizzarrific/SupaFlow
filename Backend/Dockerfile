@@ -13,4 +13,4 @@ COPY --from=build /app .
 ENV ASPNETCORE_URLS=http://+:8080
 ENV ASPNETCORE_ENVIRONMENT=Production
 EXPOSE 8080
-ENTRYPOINT ["dotnet", "StoreFlow.Api.dll"]
+ENTRYPOINT ["dotnet", "Supaflow.Api.dll"]

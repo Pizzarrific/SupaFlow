@@ -1,24 +1,24 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using StoreFlow.Api.Data;
-using StoreFlow.Api.DTOs;
-using StoreFlow.Api.Models;
-using StoreFlow.Api.Services;
+using Supaflow.Api.Data;
+using Supaflow.Api.DTOs;
+using Supaflow.Api.Models;
+using Supaflow.Api.Services;
 
-namespace StoreFlow.Api.Controllers;
+namespace Supaflow.Api.Controllers;
 
 [ApiController]
 [Route("api/restocking")]
 [Authorize]
 public class RestockingController : ControllerBase
 {
-    private readonly StoreFlowContext _context;
+    private readonly SupaflowContext _context;
     private readonly ICurrentUserService _currentUser;
     private readonly IActivityLogService _activityLog;
     private readonly INotificationService _notifications;
 
-    public RestockingController(StoreFlowContext context, ICurrentUserService currentUser, IActivityLogService activityLog, INotificationService notifications)
+    public RestockingController(SupaflowContext context, ICurrentUserService currentUser, IActivityLogService activityLog, INotificationService notifications)
     {
         _context = context;
         _currentUser = currentUser;

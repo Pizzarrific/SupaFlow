@@ -2,9 +2,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
-using StoreFlow.Api.Models;
+using Supaflow.Api.Models;
 
-namespace StoreFlow.Api.Helpers;
+namespace Supaflow.Api.Helpers;
 
 public class JwtTokenGenerator
 {

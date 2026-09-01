@@ -1,25 +1,25 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using StoreFlow.Api.Data;
-using StoreFlow.Api.DTOs;
-using StoreFlow.Api.Helpers;
-using StoreFlow.Api.Models;
-using StoreFlow.Api.Services;
+using Supaflow.Api.Data;
+using Supaflow.Api.DTOs;
+using Supaflow.Api.Helpers;
+using Supaflow.Api.Models;
+using Supaflow.Api.Services;
 
-namespace StoreFlow.Api.Controllers;
+namespace Supaflow.Api.Controllers;
 
 [ApiController]
 [Route("api/employees")]
 [Authorize]
 public class EmployeesController : ControllerBase
 {
-    private readonly StoreFlowContext _context;
+    private readonly SupaflowContext _context;
     private readonly ICurrentUserService _currentUser;
     private readonly IEmployeeIdGenerator _idGenerator;
     private readonly IActivityLogService _activityLog;
 
-    public EmployeesController(StoreFlowContext context, ICurrentUserService currentUser, IEmployeeIdGenerator idGenerator, IActivityLogService activityLog)
+    public EmployeesController(SupaflowContext context, ICurrentUserService currentUser, IEmployeeIdGenerator idGenerator, IActivityLogService activityLog)
     {
         _context = context;
         _currentUser = currentUser;
@@ -138,7 +138,7 @@ public class EmployeesController : ControllerBase
             u.JobTitle,
             EmploymentStatus = u.EmploymentStatus.ToString(),
             u.ProfileImageUrl,
-            StoreName = "StoreFlow Supermarket"
+            StoreName = "Supaflow Supermarket"
         }));
     }
 

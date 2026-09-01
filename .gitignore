@@ -1,9 +1,9 @@
 # .NET
 Backend/bin/
 Backend/obj/
-Backend/storeflow.db
-Backend/storeflow.db-shm
-Backend/storeflow.db-wal
+Backend/supaflow.db
+Backend/supaflow.db-shm
+Backend/supaflow.db-wal
 *.user
 
 # Env

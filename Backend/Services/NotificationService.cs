@@ -1,7 +1,7 @@
-using StoreFlow.Api.Data;
-using StoreFlow.Api.Models;
+using Supaflow.Api.Data;
+using Supaflow.Api.Models;
 
-namespace StoreFlow.Api.Services;
+namespace Supaflow.Api.Services;
 
 public interface INotificationService
 {
@@ -10,9 +10,9 @@ public interface INotificationService
 
 public class NotificationService : INotificationService
 {
-    private readonly StoreFlowContext _context;
+    private readonly SupaflowContext _context;
 
-    public NotificationService(StoreFlowContext context)
+    public NotificationService(SupaflowContext context)
     {
         _context = context;
     }

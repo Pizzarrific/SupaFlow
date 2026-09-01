@@ -1,20 +1,20 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using StoreFlow.Api.Data;
-using StoreFlow.Api.DTOs;
-using StoreFlow.Api.Models;
+using Supaflow.Api.Data;
+using Supaflow.Api.DTOs;
+using Supaflow.Api.Models;
 
-namespace StoreFlow.Api.Controllers;
+namespace Supaflow.Api.Controllers;
 
 [ApiController]
 [Route("api/reports")]
 [Authorize(Roles = "Manager")]
 public class ReportsController : ControllerBase
 {
-    private readonly StoreFlowContext _context;
+    private readonly SupaflowContext _context;
 
-    public ReportsController(StoreFlowContext context)
+    public ReportsController(SupaflowContext context)
     {
         _context = context;
     }

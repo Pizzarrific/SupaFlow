@@ -6,7 +6,7 @@
 // only the visible login *screen* was removed. See README for how to bring
 // a login screen back if you need real per-user sign-in later.
 
-const DEMO_ACCOUNT = { email: 'manager@storeflow.local', password: 'Password123!' };
+const DEMO_ACCOUNT = { email: 'manager@supaflow.local', password: 'Password123!' };
 
 const Auth = {
   getUser() {

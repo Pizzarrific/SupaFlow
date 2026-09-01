@@ -1,6 +1,6 @@
 bin/
 obj/
-storeflow.db
-storeflow.db-shm
-storeflow.db-wal
+supaflow.db
+supaflow.db-shm
+supaflow.db-wal
 *.user

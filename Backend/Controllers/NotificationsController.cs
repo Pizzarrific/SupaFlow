@@ -1,21 +1,21 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using StoreFlow.Api.Data;
-using StoreFlow.Api.DTOs;
-using StoreFlow.Api.Services;
+using Supaflow.Api.Data;
+using Supaflow.Api.DTOs;
+using Supaflow.Api.Services;
 
-namespace StoreFlow.Api.Controllers;
+namespace Supaflow.Api.Controllers;
 
 [ApiController]
 [Route("api/notifications")]
 [Authorize]
 public class NotificationsController : ControllerBase
 {
-    private readonly StoreFlowContext _context;
+    private readonly SupaflowContext _context;
     private readonly ICurrentUserService _currentUser;
 
-    public NotificationsController(StoreFlowContext context, ICurrentUserService currentUser)
+    public NotificationsController(SupaflowContext context, ICurrentUserService currentUser)
     {
         _context = context;
         _currentUser = currentUser;

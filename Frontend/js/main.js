@@ -43,8 +43,8 @@ function showConnectionError() {
   overlay.innerHTML = `
     <div style="width:64px; height:64px; border-radius: var(--radius-md); background: var(--status-urgent); color:#fff;
       display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1.6rem; box-shadow: var(--shadow-lg);">!</div>
-    <div class="startup-name">Can't reach StoreFlow</div>
-    <div class="startup-tagline">The API isn't responding at ${window.STOREFLOW_API_BASE || 'the configured address'}.</div>
+    <div class="startup-name">Can't reach Supaflow</div>
+    <div class="startup-tagline">The API isn't responding at ${window.SUPAFLOW_API_BASE || 'the configured address'}.</div>
     <button class="btn btn-primary" style="margin-top:0.8rem;" id="startup-retry">Retry</button>
     <div class="startup-status">If you just deployed the frontend, make sure the backend is running and
       <code>Frontend/js/config.js</code> points at its real URL.</div>
@@ -95,22 +95,9 @@ function runStartupSequence(user) {
 }
 
 function wireLangToggle() {
-  const island = document.getElementById('dynamic-island');
-  const langBtn = document.getElementById('lang-toggle-btn');
+  // The Dynamic Island is now a static brand mark — language switching
+  // lives solely in the topbar pill next to the search bar.
   const topbarLangBtn = document.getElementById('topbar-lang-btn');
-
-  island?.addEventListener('click', () => island.classList.toggle('expanded'));
-  island?.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); island.classList.toggle('expanded'); }
-  });
-  document.addEventListener('click', (e) => {
-    if (island && !island.contains(e.target)) island.classList.remove('expanded');
-  });
-
-  langBtn?.addEventListener('click', (e) => {
-    e.stopPropagation();
-    I18n.toggle();
-  });
   topbarLangBtn?.addEventListener('click', () => I18n.toggle());
 
   document.addEventListener('sf-lang-change', () => {

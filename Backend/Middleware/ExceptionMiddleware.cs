@@ -1,8 +1,8 @@
 using System.Net;
 using System.Text.Json;
-using StoreFlow.Api.DTOs;
+using Supaflow.Api.DTOs;
 
-namespace StoreFlow.Api.Middleware;
+namespace Supaflow.Api.Middleware;
 
 public class ExceptionMiddleware
 {

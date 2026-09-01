@@ -1,24 +1,24 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using StoreFlow.Api.Data;
-using StoreFlow.Api.DTOs;
-using StoreFlow.Api.Models;
-using StoreFlow.Api.Services;
+using Supaflow.Api.Data;
+using Supaflow.Api.DTOs;
+using Supaflow.Api.Models;
+using Supaflow.Api.Services;
 
-namespace StoreFlow.Api.Controllers;
+namespace Supaflow.Api.Controllers;
 
 [ApiController]
 [Route("api/tasks")]
 [Authorize]
 public class TasksController : ControllerBase
 {
-    private readonly StoreFlowContext _context;
+    private readonly SupaflowContext _context;
     private readonly ICurrentUserService _currentUser;
     private readonly INotificationService _notifications;
     private readonly IActivityLogService _activityLog;
 
-    public TasksController(StoreFlowContext context, ICurrentUserService currentUser, INotificationService notifications, IActivityLogService activityLog)
+    public TasksController(SupaflowContext context, ICurrentUserService currentUser, INotificationService notifications, IActivityLogService activityLog)
     {
         _context = context;
         _currentUser = currentUser;

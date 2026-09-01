@@ -1,7 +1,7 @@
 // ================= API client =================
 // Central fetch wrapper: attaches JWT, unwraps ApiResponse<T>, throws readable errors.
 
-const API_BASE = window.STOREFLOW_API_BASE || 'http://localhost:5080/api';
+const API_BASE = window.SUPAFLOW_API_BASE || 'http://localhost:5080/api';
 
 function getToken() {
   return localStorage.getItem('sf_token');
@@ -22,7 +22,7 @@ async function apiRequest(path, { method = 'GET', body, auth = true } = {}) {
       body: body !== undefined ? JSON.stringify(body) : undefined
     });
   } catch (networkErr) {
-    throw new Error('Cannot reach the StoreFlow server. Check that the backend is running.');
+    throw new Error('Cannot reach the Supaflow server. Check that the backend is running.');
   }
 
   if (res.status === 401) {

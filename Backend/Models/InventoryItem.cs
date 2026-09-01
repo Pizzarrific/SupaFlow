@@ -1,4 +1,4 @@
-namespace StoreFlow.Api.Models;
+namespace Supaflow.Api.Models;
 
 public class InventoryItem
 {

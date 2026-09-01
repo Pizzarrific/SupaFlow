@@ -1,19 +1,19 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using StoreFlow.Api.Data;
-using StoreFlow.Api.DTOs;
+using Supaflow.Api.Data;
+using Supaflow.Api.DTOs;
 
-namespace StoreFlow.Api.Controllers;
+namespace Supaflow.Api.Controllers;
 
 [ApiController]
 [Route("api/search")]
 [Authorize]
 public class SearchController : ControllerBase
 {
-    private readonly StoreFlowContext _context;
+    private readonly SupaflowContext _context;
 
-    public SearchController(StoreFlowContext context)
+    public SearchController(SupaflowContext context)
     {
         _context = context;
     }

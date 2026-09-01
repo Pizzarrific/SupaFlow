@@ -8,16 +8,16 @@
 # know these values until the services exist):
 #   1. Jwt__Key is auto-generated below — nothing to do there.
 #   2. Cors__AllowedOrigins__0 is a placeholder. Once Render gives the
-#      frontend its real URL (e.g. https://storeflow-frontend.onrender.com),
-#      update that env var on storeflow-api and redeploy it.
-#   3. Frontend/js/config.js's STOREFLOW_API_BASE is also a placeholder —
+#      frontend its real URL (e.g. https://supaflow-frontend.onrender.com),
+#      update that env var on supaflow-api and redeploy it.
+#   3. Frontend/js/config.js's SUPAFLOW_API_BASE is also a placeholder —
 #      update it to the backend's real URL (e.g.
-#      https://storeflow-api.onrender.com/api), commit, and push.
+#      https://supaflow-api.onrender.com/api), commit, and push.
 
 services:
   # ---- Backend: ASP.NET Core Web API (Docker) ----
   - type: web
-    name: storeflow-api
+    name: supaflow-api
     runtime: docker
     dockerfilePath: ./Backend/Dockerfile
     dockerContext: ./Backend
@@ -26,19 +26,19 @@ services:
       - key: Jwt__Key
         generateValue: true
       - key: Jwt__Issuer
-        value: StoreFlowApi
+        value: SupaflowApi
       - key: Jwt__Audience
-        value: StoreFlowClient
+        value: SupaflowClient
       - key: Cors__AllowedOrigins__0
-        value: https://storeflow-frontend.onrender.com
+        value: https://supaflow-frontend.onrender.com
       - key: ConnectionStrings__DefaultConnection
-        value: "Data Source=storeflow.db"
+        value: "Data Source=supaflow.db"
 
   # ---- Frontend: static HTML/CSS/JS, no build step ----
   # Static sites on Render are free by default and don't take a "plan" field
   # at all (that's what the "no such plan 'free'" error is about) — omit it.
   - type: web
-    name: storeflow-frontend
+    name: supaflow-frontend
     runtime: static
     buildCommand: "true"
     staticPublishPath: ./Frontend

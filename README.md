@@ -1,8 +1,8 @@
-# StoreFlow — Supermarket Operations Management System
+# Supaflow — Supermarket Operations Management System
 
 *"Keep the store moving."*
 
-StoreFlow is a full-stack operations platform for supermarket teams: tasks, attendance,
+Supaflow is a full-stack operations platform for supermarket teams: tasks, attendance,
 inventory, restocking, cleaning, deliveries, customer service, and a full Employee ID
 system, all wired together and backed by a real database.
 
@@ -15,7 +15,7 @@ system, all wired together and backed by a real database.
 ## 1. Project structure
 
 ```
-StoreFlow/
+Supaflow/
   Backend/                 ASP.NET Core Web API
     Controllers/           One controller per module (Tasks, Inventory, Employees, ...)
     Models/                EF Core entities + enums
@@ -61,7 +61,7 @@ cd Backend
 dotnet restore
 
 # Run the API — this creates the schema straight from the EF Core model
-# (no migration files to generate), creates storeflow.db, and seeds demo
+# (no migration files to generate), creates supaflow.db, and seeds demo
 # data automatically on startup:
 dotnet run
 ```
@@ -84,7 +84,7 @@ npx serve -l 5500
 Then open **http://localhost:5500/login.html**.
 
 `Frontend/js/config.js` points the UI at `http://localhost:5080/api` by default. If you
-run the backend on a different port, update `window.STOREFLOW_API_BASE` there.
+run the backend on a different port, update `window.SUPAFLOW_API_BASE` there.
 
 > The backend's `appsettings.json` CORS list already allows `http://localhost:5500` and
 > `http://127.0.0.1:5500`. If you serve the frontend from a different port, add it to
@@ -94,7 +94,7 @@ run the backend on a different port, update `window.STOREFLOW_API_BASE` there.
 ### Demo accounts
 
 There's no login screen — opening `index.html` automatically signs in as the
-demo manager account (`manager@storeflow.local` / `Password123!`) so the app
+demo manager account (`manager@supaflow.local` / `Password123!`) so the app
 is immediately browsable after deploying, which matters if you're pushing
 straight to a host without standing up the backend's real auth flow for
 every visitor. The backend's actual authentication (JWT, password hashing,
@@ -125,22 +125,22 @@ No local setup step needed — just push the repo to GitHub, then:
 
 1. In Render, choose **New → Blueprint** and point it at your repo. Render
    reads `render.yaml` and creates two services in one go:
-   - `storeflow-api` — the ASP.NET Core backend, built from
+   - `supaflow-api` — the ASP.NET Core backend, built from
      `Backend/Dockerfile`. On first boot it creates the SQLite schema
      directly from the EF Core model (`Database.EnsureCreated()`) and seeds
      demo data — no migration files to generate or commit beforehand.
-   - `storeflow-frontend` — the static frontend, served directly from
+   - `supaflow-frontend` — the static frontend, served directly from
      `Frontend/` with no build step.
 2. Render assigns each service its own URL, e.g.
-   `https://storeflow-api.onrender.com` and
-   `https://storeflow-frontend.onrender.com`.
+   `https://supaflow-api.onrender.com` and
+   `https://supaflow-frontend.onrender.com`.
 3. Two placeholder values need updating with those real URLs after the first
    deploy (Render can't know them beforehand):
-   - On `storeflow-api`, set the `Cors__AllowedOrigins__0` environment
+   - On `supaflow-api`, set the `Cors__AllowedOrigins__0` environment
      variable to your real frontend URL, then redeploy that service.
-   - In `Frontend/js/config.js`, set `window.STOREFLOW_API_BASE` to your real
-     backend URL + `/api` (e.g. `https://storeflow-api.onrender.com/api`),
-     commit, and push — `storeflow-frontend` redeploys automatically.
+   - In `Frontend/js/config.js`, set `window.SUPAFLOW_API_BASE` to your real
+     backend URL + `/api` (e.g. `https://supaflow-api.onrender.com/api`),
+     commit, and push — `supaflow-frontend` redeploys automatically.
 4. From then on, **every `git push` redeploys both services automatically**
    — the same "push and it builds" workflow Vercel gives you for static
    sites, just covering the API too.
@@ -158,7 +158,7 @@ If you'd rather split platforms anyway — say, Vercel for the frontend's CDN
 and edge network, Render for the API — that still works: just point
 `Frontend/js/config.js` at Render's API URL and set `Cors__AllowedOrigins__0`
 to your Vercel URL instead of the Render frontend URL. The `render.yaml`
-blueprint would then only need its `storeflow-api` service.
+blueprint would then only need its `supaflow-api` service.
 
 ### Production database recommendation
 
@@ -244,7 +244,7 @@ before delivery:
 Being upfront about a few pragmatic choices made to keep ~40 endpoints and ~30 frontend
 views consistent and shippable:
 
-- **No separate repository layer.** Controllers talk to `StoreFlowContext` (EF Core)
+- **No separate repository layer.** Controllers talk to `SupaflowContext` (EF Core)
   directly, with `NotificationService`, `ActivityLogService`, `EmployeeIdGenerator`, and
   `CurrentUserService` pulled out as the genuinely cross-cutting pieces.
 - **Schema creation uses `EnsureCreated()`, not migrations.** This means zero local setup

@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-namespace StoreFlow.Api.Services;
+namespace Supaflow.Api.Services;
 
 public interface ICurrentUserService
 {

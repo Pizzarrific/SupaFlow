@@ -1,7 +1,7 @@
-using StoreFlow.Api.Data;
-using StoreFlow.Api.Models;
+using Supaflow.Api.Data;
+using Supaflow.Api.Models;
 
-namespace StoreFlow.Api.Services;
+namespace Supaflow.Api.Services;
 
 public interface IActivityLogService
 {
@@ -10,9 +10,9 @@ public interface IActivityLogService
 
 public class ActivityLogService : IActivityLogService
 {
-    private readonly StoreFlowContext _context;
+    private readonly SupaflowContext _context;
 
-    public ActivityLogService(StoreFlowContext context)
+    public ActivityLogService(SupaflowContext context)
     {
         _context = context;
     }
